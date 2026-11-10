@@ -1,6 +1,6 @@
 # Forge Agent Hub
 
-> Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Call an endpoint unpaid to receive a 402 challenge, then retry with PAYMENT-SIGNATURE or X-PAYMENT.
+> Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Wave-1 tools (forge-tools.dentreprise.workers.dev) accept `?demo=1` for a labelled sample (HTTP 200, not live data) and the first 3 successful real calls per IP per UTC day are free; further unpaid calls still return a valid x402 v2 402. Original gateway tools do not offer that trial; labelled samples for every catalog tool are at /demo/{slug}.json. After any free trial, retry a 402 with PAYMENT-SIGNATURE or X-PAYMENT, or use @x402/fetch / the Python package x402.
 
 API base (original 14 tools): https://x402-gateway.forge-x402.workers.dev
 API base (wave-1 tools): https://forge-tools.dentreprise.workers.dev
@@ -70,6 +70,8 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [kyb-check-eu](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-eu/index.md): 0.01 USDC — One-call KYB for any EU company by VAT number: VIES validity with registered name/address, sanctions screening (US CSL/OFAC, EU, FR, UK) of the name, GLEIF LEI candidates, plus national register data for France (Sirene + BODACC proceedings) and Finland (PRH), with a pass/review/fail verdict.
 - [kyb-check-fr](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/index.md): 0.01 USDC — One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.
 - [supplier-due-diligence](https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/index.md): 0.01 USDC — Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, UK Companies House profile when country=GB, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.
+- [playbook-x402-seller](https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/index.md): 3 USDC — Playbook: become an x402 seller on Cloudflare Workers.
+- [playbook-mcp-publish](https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/index.md): 3 USDC — Playbook: build and publish an MCP server to the official registry.
 
 ## Apify Actors
 
@@ -80,13 +82,15 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 56 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 58 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.
 - [llms-full.txt](https://agent-hub.dentreprise.workers.dev/llms-full.txt): full documentation in one file.
 - [Payment notes](https://agent-hub.dentreprise.workers.dev/docs/payment/index.md)
 - [MCP notes](https://agent-hub.dentreprise.workers.dev/docs/mcp/index.md)
+- [Quickstart](https://agent-hub.dentreprise.workers.dev/quickstart/): free trial, demo samples, @x402/fetch, Python x402, MCP and LangChain snippets.
+- [Labelled demos](https://agent-hub.dentreprise.workers.dev/demo/gtin-validate.json): `/demo/{slug}.json` for every catalog tool.
 
 ## Optional
 

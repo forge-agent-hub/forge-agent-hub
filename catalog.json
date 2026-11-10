@@ -3,7 +3,15 @@
   "publisher": "Forge Agent Hub",
   "contact": "jqfpxwv7@mail.grokbot.com",
   "apiBase": "https://x402-gateway.forge-x402.workers.dev",
-  "updated": "2026-11-10T17:01:24.950Z",
+  "updated": "2026-11-10T18:03:37.874Z",
+  "trial": {
+    "demo_query": "demo=1",
+    "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+    "free_calls_per_ip_per_utc_day": 3,
+    "applies_to": "wave-1 tools on https://forge-tools.dentreprise.workers.dev",
+    "hub_samples": "https://agent-hub.dentreprise.workers.dev/demo/{slug}.json",
+    "note": "Wave-1 tools: ?demo=1 returns a labelled sample (HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free. Further unpaid calls still receive a valid x402 v2 402. Original gateway tools do not offer this trial; use the hub sample files."
+  },
   "payment": {
     "protocol": "x402",
     "version": 2,
@@ -92,6 +100,14 @@
             "active": true
           }
         ]
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/fr-company.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fr-company.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -139,6 +155,14 @@
         "country": "FR",
         "number": "40303265045",
         "name": "SA SODIMAS"
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/eu-vat.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/eu-vat.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -185,6 +209,14 @@
         "country": "FR",
         "iban": "FR7630006000011234567890189",
         "bban": "30006000011234567890189"
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/iban.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/iban.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -231,6 +263,14 @@
         "url": "https://example.com",
         "title": "Example Domain",
         "markdown": "# Example Domain\n..."
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/markdown.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/markdown.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -285,6 +325,14 @@
             "score": 0.95
           }
         ]
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/fr-address.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fr-address.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -347,6 +395,14 @@
             "local_name": "Jour de l'an"
           }
         ]
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/holidays.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/holidays.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -409,6 +465,14 @@
         "result": 112.67,
         "date": "2026-11-04",
         "source": "ECB"
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/fx.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fx.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -457,6 +521,14 @@
         "description": null,
         "og": {},
         "feeds": []
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/web-meta.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/web-meta.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -508,6 +580,14 @@
         ],
         "disposable": false,
         "role_account": true
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/email-check.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/email-check.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -558,6 +638,14 @@
         "nameservers": [
           "A.IANA-SERVERS.NET"
         ]
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/rdap.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/rdap.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -611,6 +699,14 @@
           "registered": true,
           "active": true
         }
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/ch-uid.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/ch-uid.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -658,6 +754,14 @@
         "found": 2,
         "invalidFormat": 0,
         "results": []
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/ch-uid-batch.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/ch-uid-batch.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -715,6 +819,14 @@
         "apartmentSales": 381,
         "houseMedianPricePerM2": 17846,
         "houseSales": 12
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/dvf-price-m2.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/dvf-price-m2.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -763,6 +875,14 @@
         "name": "DANONE",
         "noticesTotal": 107,
         "lastNoticeDate": "2026-09-02"
+      },
+      "demo": {
+        "live": false,
+        "query": null,
+        "url": "https://agent-hub.dentreprise.workers.dev/demo/bodacc-health.json",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/bodacc-health.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "Live ?demo=1 is not offered on the original gateway. This is a labelled sample hosted on the hub."
       }
     },
     {
@@ -822,6 +942,14 @@
             "status": "pass"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/x402-compliance?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev%2Fapi%2Ffx%3Ffrom%3DEUR%26to%3DUSD&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/x402-compliance.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -892,6 +1020,14 @@
         "errors": 0,
         "warnings": 1,
         "issues": []
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card?url=https%3A%2F%2Fexample.com&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/a2a-agent-card.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -961,6 +1097,14 @@
             "path": "$schema"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint?manifest=%5Bobject+Object%5D&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/mcp-manifest-lint.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1046,6 +1190,14 @@
           "version": 1,
           "resources": []
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&payTo=0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7&price=0.001&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/x402-manifest-from-openapi.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1113,6 +1265,14 @@
             "abstract": "…"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/pubmed-search?q=x402+OR+%22agent+payments%22&max=3&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/pubmed-search.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1167,6 +1327,14 @@
             "ok": true
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/x402-listing-check.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1229,6 +1397,14 @@
         "status": "ACTIVE",
         "jurisdiction": "FR",
         "ultimate_parent": null
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/lei-lookup?lei=969500KMUQ2B6CBAF162&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/lei-lookup.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1296,6 +1472,14 @@
             "published": "2026-11-10T12:00:00.000Z"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/rss-to-json?url=https%3A%2F%2Fhnrss.org%2Ffrontpage&limit=10&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/rss-to-json.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1348,6 +1532,14 @@
             "registry": "EU EOS (European Commission)"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/eori-validate?eori=FR55203253400019&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/eori-validate.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1414,6 +1606,14 @@
             ]
           }
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/sec-financials?ticker=AAPL&years=3&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/sec-financials.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1460,6 +1660,14 @@
         "name": "Nutella",
         "brands": "Ferrero",
         "nutriscore": "e"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product?barcode=3017624010701&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/openfoodfacts-product.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1522,6 +1730,14 @@
             "pdf_url": "https://arxiv.org/pdf/2501.00001v1"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/arxiv-search?q=agent+payments&max=3&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/arxiv-search.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1571,6 +1787,14 @@
         "found": true,
         "title": "Nanometre-scale thermometry in a living cell",
         "container": "Nature"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/crossref-doi?doi=10.1038%2Fnature12373&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/crossref-doi.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1617,6 +1841,14 @@
         "valid": true,
         "gtin14": "03017624010701",
         "gs1_prefix_region": "France & Monaco"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/gtin-validate?gtin=3017624010701&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/gtin-validate.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1662,6 +1894,14 @@
         "format": "ISBN-13",
         "valid": true,
         "isbn10": "2070368223"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/isbn-validate?isbn=978-2-07-036822-8&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/isbn-validate.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1708,6 +1948,14 @@
         "healthy": true,
         "protocol_version": "2025-06-18",
         "tools_count": 12
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect?url=https%3A%2F%2Fexample.com%2Fmcp&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/mcp-inspect.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1756,6 +2004,14 @@
         "operations": 19,
         "errors": 0,
         "warnings": 4
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-lint?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/openapi-lint.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1819,6 +2075,14 @@
             "lastmod": "2026-01-01"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls?url=https%3A%2F%2Fwww.sitemaps.org%2Fsitemap.xml&limit=50&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/sitemap-urls.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1884,6 +2148,14 @@
             ]
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/tz-convert?time=2026-03-29T02%3A30&from=Europe%2FParis&to=America%2FNew_York%2CAsia%2FTokyo&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/tz-convert.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1937,6 +2209,14 @@
         "uuids": [
           "019a6f2e-…"
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/uuid-v7?count=3&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/uuid-v7.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -1982,6 +2262,14 @@
         "type": "SIREN",
         "valid": true,
         "vat_number_fr": "FR27552032534"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/siren-check?siren=552032534&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/siren-check.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2032,6 +2320,14 @@
         "e164": "+33123456789",
         "country": "FR",
         "type": "FIXED_LINE"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/phone-parse?phone=%2B33+1+23+45+67+89&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/phone-parse.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2085,6 +2381,14 @@
             "supports_v2": true
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health?network=eip155%3A8453&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/x402-facilitator-health.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2158,6 +2462,14 @@
           "age": 42
         },
         "repaired_valid": true
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate?schema=%5Bobject+Object%5D&data=%7B%22age%22%3A+%2242%22%7D&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/json-schema-validate.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2217,6 +2529,14 @@
             }
           ]
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity?q=Annecy&lang=fr&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/wikidata-entity.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2280,6 +2600,14 @@
             }
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/fr-communes?name=Annecy&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fr-communes.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2348,6 +2676,14 @@
             }
           }
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/fx-history?from=EUR&to=USD&start=2026-01-01&end=2026-03-31&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fx-history.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2409,6 +2745,14 @@
             "start_local": "2026-10-17"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar?zone=A&year=2026-2027&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fr-school-calendar.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2466,6 +2810,14 @@
             }
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/openapi-to-mcp.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2536,6 +2888,14 @@
             "programmes": "UKR"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/sanctions-check?name=Bank+Rossiya&type=entity&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/sanctions-check.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2592,6 +2952,14 @@
           "ongoing": false
         },
         "risk": "none_found"
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/fr-legal-status?siren=552032534&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fr-legal-status.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2660,6 +3028,14 @@
             "deadline": "2026-12-01"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/eu-tenders?q=logiciel&since=2026-11-01&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/eu-tenders.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2713,6 +3089,14 @@
         "admin_district": "Westminster",
         "lat": 51.501,
         "lon": -0.1416
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/uk-postcode?postcode=SW1A+1AA&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/uk-postcode.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2775,6 +3159,14 @@
             "lon": 4.89
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/eu-address?address=Damrak+1+Amsterdam&country=NL&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/eu-address.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2827,6 +3219,14 @@
         "name": "EQUINOR ASA",
         "vat_registered": true,
         "bankrupt": false
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/no-company?orgnr=923609016&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/no-company.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2883,6 +3283,14 @@
             "vat_number": "FI01120389"
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/fi-company?business_id=0112038-9&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/fi-company.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2940,6 +3348,14 @@
         "filing": {
           "accounts_overdue": false
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/uk-company?company_number=00445790&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/uk-company.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -2993,6 +3409,14 @@
         "sanctions": {
           "match": false
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-uk?company_number=00445790&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/kyb-check-uk.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -3065,6 +3489,14 @@
             "embedded_emissions_t": 275
           }
         ]
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/eu-carbon-customs?cn=72081000&country=CN&tonnes=100&price_eur=75&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/eu-carbon-customs.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -3121,6 +3553,14 @@
         "sanctions": {
           "match": false
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-eu?vat=FR27552032534&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/kyb-check-eu.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -3172,6 +3612,14 @@
         "sanctions": {
           "match": false
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-fr?siren=552032534&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/kyb-check-fr.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     },
     {
@@ -3240,6 +3688,118 @@
         "sanctions": {
           "match": false
         }
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/supplier-due-diligence?name=Nokia+Oyj&country=FI&vat=FI01120389&demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/supplier-due-diligence.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
+      }
+    },
+    {
+      "id": "playbook-x402-seller",
+      "kind": "x402",
+      "title": "playbook-x402-seller",
+      "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+      "path": "/api/playbook-x402-seller",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/",
+      "category": "Agent training",
+      "price": {
+        "amount": 3,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {},
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "exampleResponse": {
+        "title": "Become an x402 seller on Cloudflare Workers",
+        "toc": [
+          "1. What an unpaid caller must see",
+          "2. The Worker paywall (x402 v2, exact, USDC on Base)",
+          "3. Settle only after a successful handler",
+          "4. Facilitator choice, without putting secrets in the repo",
+          "5. Discovery files agents actually fetch",
+          "6. Cloudflare account, D1, and a failed KV attempt",
+          "7. Verify before you list the endpoint"
+        ],
+        "body": "Full playbook after payment."
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller?demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/playbook-x402-seller.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
+      }
+    },
+    {
+      "id": "playbook-mcp-publish",
+      "kind": "x402",
+      "title": "playbook-mcp-publish",
+      "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+      "path": "/api/playbook-mcp-publish",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/",
+      "category": "Agent training",
+      "price": {
+        "amount": 3,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {},
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "exampleResponse": {
+        "title": "Build and publish an MCP server to the official registry",
+        "toc": [
+          "1. What you are publishing",
+          "2. The official publisher is a Go CLI, not the npm name",
+          "3. A valid server.json",
+          "4. Login with a GitHub token (no browser required)",
+          "5. Stdio package versus the hosted remote",
+          "6. Version bumps and expired tokens",
+          "7. Check that the version is live"
+        ],
+        "body": "Full playbook after payment."
+      },
+      "demo": {
+        "live": true,
+        "query": "demo=1",
+        "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish?demo=1",
+        "hub_sample": "https://agent-hub.dentreprise.workers.dev/demo/playbook-mcp-publish.json",
+        "label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+        "note": "HTTP 200 labelled sample or excerpt, not live data, not charged. First 3 successful real calls per IP per UTC day are also free."
       }
     }
   ],

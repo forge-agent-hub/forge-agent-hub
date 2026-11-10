@@ -4,7 +4,7 @@
     "title": "Forge Agent API",
     "version": "1.0.0",
     "summary": "Pay-per-call utility APIs for agents and developers. USDC on Base via x402. No account, no API key.",
-    "description": "Each paid path accepts GET (query string) or POST (JSON body). Call once without payment to receive an HTTP 402 challenge, then retry with a PAYMENT-SIGNATURE or X-PAYMENT header. Settlement is USDC on Base (eip155:8453), scheme `exact`.\n\nPublished by Forge Agent Hub. Contact: jqfpxwv7@mail.grokbot.com.\n\nThis specification is generated from the live route table. The API base is https://x402-gateway.forge-x402.workers.dev. An MCP server (Streamable HTTP) is exposed at https://x402-gateway.forge-x402.workers.dev/mcp (one tool per path, plus free `list_endpoints`; payment in MCP `_meta`).",
+    "description": "Each paid path accepts GET (query string) or POST (JSON body). Settlement is USDC on Base (eip155:8453), scheme `exact`.\n\nWave-1 tools (https://forge-tools.dentreprise.workers.dev) accept ?demo=1 for a labelled sample or excerpt (HTTP 200, no payment, not live data). The first 3 successful real calls per client IP per UTC day are also free; further unpaid calls still return a valid x402 v2 402. Original gateway tools do not offer that trial; labelled samples for every catalog tool are at https://agent-hub.dentreprise.workers.dev/demo/{slug}.json.\n\nCall once without payment (after any free trial) to receive an HTTP 402 challenge, then retry with a PAYMENT-SIGNATURE or X-PAYMENT header, or use @x402/fetch / the Python package x402.\n\nPublished by Forge Agent Hub. Contact: jqfpxwv7@mail.grokbot.com.\n\nThis specification is generated from the live route table. The original API base is https://x402-gateway.forge-x402.workers.dev. An MCP server (Streamable HTTP) is exposed at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools, plus free `list_endpoints`; payment in MCP `_meta`). stdio coverage of the full catalog: github.com/forge-agent-hub/forge-agent-mcp.",
     "contact": {
       "name": "Forge Agent Hub",
       "email": "jqfpxwv7@mail.grokbot.com",
@@ -98,7 +98,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -281,7 +281,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -461,7 +461,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -627,7 +627,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -790,7 +790,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -955,7 +955,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1118,7 +1118,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1279,7 +1279,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1437,7 +1437,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1630,7 +1630,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1838,7 +1838,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2035,7 +2035,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2247,7 +2247,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2440,7 +2440,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2618,7 +2618,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2799,7 +2799,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2978,7 +2978,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3163,7 +3163,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3346,7 +3346,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3526,7 +3526,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3704,7 +3704,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3897,7 +3897,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4087,7 +4087,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4253,7 +4253,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4434,7 +4434,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4618,7 +4618,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4791,7 +4791,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4962,7 +4962,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5092,6 +5092,19 @@
               "type": "string"
             },
             "description": "GET (default) or POST"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -5139,7 +5152,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5343,7 +5356,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5547,6 +5560,19 @@
               "type": "string"
             },
             "description": "generate: JSON array or comma-separated skill names"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -5594,7 +5620,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5792,7 +5818,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -5936,6 +5962,19 @@
               "type": "string"
             },
             "description": "server_json or host_config (auto-detected)"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -5983,7 +6022,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6192,7 +6231,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6389,6 +6428,19 @@
               "type": "string"
             },
             "description": "Override server URL"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -6436,7 +6488,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6674,7 +6726,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -6872,6 +6924,19 @@
               "type": "string"
             },
             "description": "true/false, default true"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -6919,7 +6984,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7122,7 +7187,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7269,6 +7334,19 @@
               "type": "string"
             },
             "description": "Resources to probe, 0-10, default 5"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -7316,7 +7394,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7498,7 +7576,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7662,6 +7740,19 @@
               "type": "string"
             },
             "description": "true/false, default true"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -7709,7 +7800,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7905,7 +7996,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8073,6 +8164,19 @@
               "type": "string"
             },
             "description": "keep HTML in summaries"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -8120,7 +8224,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8323,7 +8427,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8461,6 +8565,19 @@
               "type": "string"
             },
             "description": "EORI number(s), comma-separated, max 10"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -8508,7 +8625,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8696,7 +8813,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -8861,6 +8978,19 @@
               "type": "string"
             },
             "description": "Comma list: revenue,net_income,… or us-gaap:Tag"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -8908,7 +9038,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9116,7 +9246,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9263,6 +9393,19 @@
               "type": "string"
             },
             "description": "8-14 digit barcode"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -9310,7 +9453,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9476,7 +9619,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9619,6 +9762,19 @@
               "type": "string"
             },
             "description": "relevance, submitted, updated"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -9666,7 +9822,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -9860,7 +10016,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10002,6 +10158,19 @@
               "type": "string"
             },
             "description": "true to include references"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -10049,7 +10218,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10214,7 +10383,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10325,6 +10494,19 @@
               "type": "string"
             },
             "description": "Code(s), comma-separated"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -10372,7 +10554,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10538,7 +10720,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10654,6 +10836,19 @@
               "type": "string"
             },
             "description": "ISBN-10 or ISBN-13"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -10701,7 +10896,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10862,7 +11057,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -10973,6 +11168,19 @@
               "type": "string"
             },
             "description": "MCP endpoint URL"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -11020,7 +11228,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11186,7 +11394,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11311,6 +11519,19 @@
               "type": "object"
             },
             "description": "Inline spec (POST)"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -11358,7 +11579,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11526,7 +11747,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11669,6 +11890,19 @@
               "type": "string"
             },
             "description": "Only URLs containing this text"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -11716,7 +11950,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11907,7 +12141,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12053,6 +12287,19 @@
               "type": "string"
             },
             "description": "Target zones, comma-separated"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -12100,7 +12347,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12305,7 +12552,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12468,6 +12715,19 @@
               "type": "string"
             },
             "description": "UUID to validate/decode instead"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -12515,7 +12775,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12687,7 +12947,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -12803,6 +13063,19 @@
               "type": "string"
             },
             "description": "SIREN/SIRET number(s), comma-separated"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -12850,7 +13123,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13011,7 +13284,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13131,6 +13404,19 @@
               "type": "string"
             },
             "description": "Default ISO country for national numbers"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -13178,7 +13464,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13348,7 +13634,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13473,6 +13759,19 @@
               "type": "string"
             },
             "description": "CAIP-2 network to check, default eip155:8453"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -13520,7 +13819,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13705,7 +14004,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -13856,6 +14155,19 @@
               "type": "string"
             },
             "description": "true (default) / false"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -13903,7 +14215,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14113,7 +14425,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14271,6 +14583,19 @@
               "type": "string"
             },
             "description": "Language code, default en"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -14318,7 +14643,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14510,7 +14835,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14672,6 +14997,19 @@
               "type": "string"
             },
             "description": "1-20"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -14719,7 +15057,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -14919,7 +15257,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15086,6 +15424,19 @@
               "type": "string"
             },
             "description": "YYYY-MM-DD, default today"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -15133,7 +15484,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15336,7 +15687,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15500,6 +15851,19 @@
               "type": "string"
             },
             "description": "Académie name filter"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -15547,7 +15911,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15736,7 +16100,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -15882,6 +16246,19 @@
               "type": "string"
             },
             "description": "Override server URL"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -15929,7 +16306,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16115,7 +16492,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16281,6 +16658,19 @@
               "type": "string"
             },
             "description": "1-50"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -16328,7 +16718,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16538,7 +16928,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16690,6 +17080,19 @@
               "type": "string"
             },
             "description": "notices 1-50"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -16737,7 +17140,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -16931,7 +17334,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17107,6 +17510,19 @@
               "type": "string"
             },
             "description": "1-50 per source"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -17154,7 +17570,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17354,7 +17770,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17505,6 +17921,19 @@
               "type": "string"
             },
             "description": "reverse: longitude"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -17552,7 +17981,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17729,7 +18158,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -17868,6 +18297,19 @@
               "type": "string"
             },
             "description": "1-10"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -17915,7 +18357,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18113,7 +18555,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18269,6 +18711,19 @@
               "type": "string"
             },
             "description": "1-20"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -18316,7 +18771,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18488,7 +18943,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18622,6 +19077,19 @@
               "type": "string"
             },
             "description": "1-20"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -18669,7 +19137,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18853,7 +19321,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -18999,6 +19467,19 @@
               "type": "string"
             },
             "description": "1-20"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -19046,7 +19527,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -19237,7 +19718,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -19381,6 +19862,19 @@
               "type": "string"
             },
             "description": "Name (alternative; best match is checked)"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -19428,7 +19922,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -19615,7 +20109,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -19786,6 +20280,19 @@
               "type": "string"
             },
             "description": "CBAM certificate price EUR/tCO2e (optional)"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -19833,7 +20340,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20041,7 +20548,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20188,6 +20695,19 @@
               "type": "string"
             },
             "description": "Company name if VIES does not publish it"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -20235,7 +20755,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20429,7 +20949,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20569,6 +21089,19 @@
               "type": "string"
             },
             "description": "SIREN or SIRET"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -20616,7 +21149,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20801,7 +21334,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -20954,6 +21487,19 @@
               "type": "string"
             },
             "description": "EU VAT number (optional)"
+          },
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
           }
         ],
         "security": [],
@@ -21001,7 +21547,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -21220,7 +21766,7 @@
         },
         "responses": {
           "200": {
-            "description": "Paid request succeeded. JSON body.",
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
             "content": {
               "application/json": {
                 "schema": {
@@ -21340,6 +21886,678 @@
                       "scheme": "exact",
                       "network": "eip155:8453",
                       "amount": "10000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/playbook-x402-seller": {
+      "servers": [
+        {
+          "url": "https://forge-tools.dentreprise.workers.dev",
+          "description": "Wave-1 tools worker"
+        }
+      ],
+      "get": {
+        "operationId": "playbook_x402_seller_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Playbook: become an x402 seller on Cloudflare Workers",
+        "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid. Pay-per-call: $3 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Become an x402 seller on Cloudflare Workers"
+                    },
+                    "toc": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "1. What an unpaid caller must see"
+                      }
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "Full playbook after payment."
+                    }
+                  }
+                },
+                "example": {
+                  "title": "Become an x402 seller on Cloudflare Workers",
+                  "toc": [
+                    "1. What an unpaid caller must see",
+                    "2. The Worker paywall (x402 v2, exact, USDC on Base)",
+                    "3. Settle only after a successful handler",
+                    "4. Facilitator choice, without putting secrets in the repo",
+                    "5. Discovery files agents actually fetch",
+                    "6. Cloudflare account, D1, and a failed KV attempt",
+                    "7. Verify before you list the endpoint"
+                  ],
+                  "body": "Full playbook after payment."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/playbook-x402-seller",
+                    "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "playbook_x402_seller",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Playbook: become an x402 seller on Cloudflare Workers (JSON body)",
+        "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid. Pay-per-call: $3 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": []
+              },
+              "example": {}
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Become an x402 seller on Cloudflare Workers"
+                    },
+                    "toc": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "1. What an unpaid caller must see"
+                      }
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "Full playbook after payment."
+                    }
+                  }
+                },
+                "example": {
+                  "title": "Become an x402 seller on Cloudflare Workers",
+                  "toc": [
+                    "1. What an unpaid caller must see",
+                    "2. The Worker paywall (x402 v2, exact, USDC on Base)",
+                    "3. Settle only after a successful handler",
+                    "4. Facilitator choice, without putting secrets in the repo",
+                    "5. Discovery files agents actually fetch",
+                    "6. Cloudflare account, D1, and a failed KV attempt",
+                    "7. Verify before you list the endpoint"
+                  ],
+                  "body": "Full playbook after payment."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/playbook-x402-seller",
+                    "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/playbook-mcp-publish": {
+      "servers": [
+        {
+          "url": "https://forge-tools.dentreprise.workers.dev",
+          "description": "Wave-1 tools worker"
+        }
+      ],
+      "get": {
+        "operationId": "playbook_mcp_publish_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Playbook: build and publish an MCP server to the official registry",
+        "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid. Pay-per-call: $3 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "demo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            },
+            "description": "Set to 1 to receive a labelled sample or excerpt with HTTP 200 and no payment (not live data)."
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Build and publish an MCP server to the official registry"
+                    },
+                    "toc": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "1. What you are publishing"
+                      }
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "Full playbook after payment."
+                    }
+                  }
+                },
+                "example": {
+                  "title": "Build and publish an MCP server to the official registry",
+                  "toc": [
+                    "1. What you are publishing",
+                    "2. The official publisher is a Go CLI, not the npm name",
+                    "3. A valid server.json",
+                    "4. Login with a GitHub token (no browser required)",
+                    "5. Stdio package versus the hosted remote",
+                    "6. Version bumps and expired tokens",
+                    "7. Check that the version is live"
+                  ],
+                  "body": "Full playbook after payment."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/playbook-mcp-publish",
+                    "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "playbook_mcp_publish",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Playbook: build and publish an MCP server to the official registry (JSON body)",
+        "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid. Pay-per-call: $3 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": []
+              },
+              "example": {}
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "3"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid or free-trial request succeeded, or a labelled demo sample when ?demo=1 is set on a wave-1 tool. Demo bodies include demo: true and are not live data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "example": "Build and publish an MCP server to the official registry"
+                    },
+                    "toc": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "1. What you are publishing"
+                      }
+                    },
+                    "body": {
+                      "type": "string",
+                      "example": "Full playbook after payment."
+                    }
+                  }
+                },
+                "example": {
+                  "title": "Build and publish an MCP server to the official registry",
+                  "toc": [
+                    "1. What you are publishing",
+                    "2. The official publisher is a Go CLI, not the npm name",
+                    "3. A valid server.json",
+                    "4. Login with a GitHub token (no browser required)",
+                    "5. Stdio package versus the hosted remote",
+                    "6. Version bumps and expired tokens",
+                    "7. Check that the version is live"
+                  ],
+                  "body": "Full playbook after payment."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/playbook-mcp-publish",
+                    "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000000",
                       "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
                       "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
                       "maxTimeoutSeconds": 120,

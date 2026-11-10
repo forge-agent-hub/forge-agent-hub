@@ -1,6 +1,6 @@
 # Forge Agent Hub
 
-> Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Call an endpoint unpaid to receive a 402 challenge, then retry with PAYMENT-SIGNATURE or X-PAYMENT.
+> Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Wave-1 tools (forge-tools.dentreprise.workers.dev) accept `?demo=1` for a labelled sample (HTTP 200, not live data) and the first 3 successful real calls per IP per UTC day are free; further unpaid calls still return a valid x402 v2 402. Original gateway tools do not offer that trial; labelled samples for every catalog tool are at /demo/{slug}.json. After any free trial, retry a 402 with PAYMENT-SIGNATURE or X-PAYMENT, or use @x402/fetch / the Python package x402.
 
 API base (original 14 tools): https://x402-gateway.forge-x402.workers.dev
 API base (wave-1 tools): https://forge-tools.dentreprise.workers.dev
@@ -70,6 +70,8 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [kyb-check-eu](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-eu/index.md): 0.01 USDC — One-call KYB for any EU company by VAT number: VIES validity with registered name/address, sanctions screening (US CSL/OFAC, EU, FR, UK) of the name, GLEIF LEI candidates, plus national register data for France (Sirene + BODACC proceedings) and Finland (PRH), with a pass/review/fail verdict.
 - [kyb-check-fr](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/index.md): 0.01 USDC — One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.
 - [supplier-due-diligence](https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/index.md): 0.01 USDC — Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, UK Companies House profile when country=GB, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.
+- [playbook-x402-seller](https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/index.md): 3 USDC — Playbook: become an x402 seller on Cloudflare Workers.
+- [playbook-mcp-publish](https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/index.md): 3 USDC — Playbook: build and publish an MCP server to the official registry.
 
 ## Apify Actors
 
@@ -80,13 +82,15 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 56 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 58 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.
 - [llms-full.txt](https://agent-hub.dentreprise.workers.dev/llms-full.txt): full documentation in one file.
 - [Payment notes](https://agent-hub.dentreprise.workers.dev/docs/payment/index.md)
 - [MCP notes](https://agent-hub.dentreprise.workers.dev/docs/mcp/index.md)
+- [Quickstart](https://agent-hub.dentreprise.workers.dev/quickstart/): free trial, demo samples, @x402/fetch, Python x402, MCP and LangChain snippets.
+- [Labelled demos](https://agent-hub.dentreprise.workers.dev/demo/gtin-validate.json): `/demo/{slug}.json` for every catalog tool.
 
 ## Optional
 
@@ -106,7 +110,7 @@ Network: eip155:8453 (Base)
 Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
 payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
 
-Call GET or POST without a payment header, read the 402 body and PAYMENT-REQUIRED header, then retry with PAYMENT-SIGNATURE or X-PAYMENT, or use @x402/fetch. Amounts in accepts[].amount are atomic USDC units (6 decimals).
+Wave-1 tools accept `?demo=1` for a labelled sample (no payment, not live data) and the first 3 successful real calls per IP per UTC day are free. After that, or on the original gateway, call GET or POST without a payment header, read the 402 body and PAYMENT-REQUIRED header, then retry with PAYMENT-SIGNATURE or X-PAYMENT, or use @x402/fetch (not the deprecated v1 package x402-fetch) or the Python package x402. Amounts in accepts[].amount are atomic USDC units (6 decimals).
 
 
 # MCP
@@ -180,6 +184,44 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fr-company?q=dano
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/fr-company.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fr-company",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-company/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "results": [
+      {
+        "siren": "552032534",
+        "name": "DANONE",
+        "naf": "70.10Z",
+        "hq_address": "59-61 RUE LA FAYETTE 75009 PARIS",
+        "active": true
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fr-company/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # eu-vat
 
@@ -238,6 +280,39 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/eu-vat?vat=FR4030
   "name": "SA SODIMAS"
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/eu-vat.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/eu-vat",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-vat/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "valid": true,
+    "country": "FR",
+    "number": "40303265045",
+    "name": "SA SODIMAS"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/eu-vat/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # iban
@@ -298,6 +373,39 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/iban?iban=FR76300
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/iban.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/iban",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/iban/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "valid": true,
+    "country": "FR",
+    "iban": "FR7630006000011234567890189",
+    "bban": "30006000011234567890189"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/iban/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # markdown
 
@@ -355,6 +463,38 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/markdown?url=http
   "markdown": "# Example Domain\n..."
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/markdown.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/markdown",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/markdown/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "url": "https://example.com",
+    "title": "Example Domain",
+    "markdown": "# Example Domain\n..."
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/markdown/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # fr-address
@@ -421,6 +561,46 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fr-address?q=8+bd
   ]
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/fr-address.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fr-address",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-address/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "results": [
+      {
+        "label": "8 Boulevard du Port 95000 Cergy",
+        "postcode": "95000",
+        "city": "Cergy",
+        "citycode": "95127",
+        "lat": 49.03,
+        "lon": 2.06,
+        "score": 0.95
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fr-address/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # holidays
@@ -489,6 +669,45 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/holidays?country=
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/holidays.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/holidays",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/holidays/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "country": "FR",
+    "year": 2026,
+    "count": 11,
+    "holidays": [
+      {
+        "date": "2026-01-01",
+        "name": "New Year's Day",
+        "local_name": "Jour de l'an"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/holidays/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # fx
 
@@ -554,6 +773,42 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fx?from=EUR&to=US
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/fx.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fx",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fx/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "from": "EUR",
+    "to": "USD",
+    "amount": 100,
+    "rate": 1.1267,
+    "result": 112.67,
+    "date": "2026-11-04",
+    "source": "ECB"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fx/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # web-meta
 
@@ -614,6 +869,41 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/web-meta?url=http
   "feeds": []
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/web-meta.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/web-meta",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/web-meta/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "url": "https://example.com",
+    "status": 200,
+    "title": "Example Domain",
+    "description": null,
+    "og": {},
+    "feeds": []
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/web-meta/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # email-check
@@ -679,6 +969,44 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/email-check?email
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/email-check.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/email-check",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/email-check/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "email": "contact@example.com",
+    "syntax_ok": true,
+    "domain": "example.com",
+    "has_mx": true,
+    "mx": [
+      "mx.example.com"
+    ],
+    "disposable": false,
+    "role_account": true
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/email-check/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # rdap
 
@@ -741,6 +1069,43 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/rdap?domain=wikip
   ]
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/rdap.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/rdap",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/rdap/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "domain": "EXAMPLE.COM",
+    "registrar": "RESERVED-Internet Assigned Numbers Authority",
+    "created": "1995-08-14T04:00:00Z",
+    "expires": "2026-08-13T04:00:00Z",
+    "age_days": 11400,
+    "nameservers": [
+      "A.IANA-SERVERS.NET"
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/rdap/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # ch-uid
@@ -807,6 +1172,45 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/ch-uid?uid=CHE-10
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/ch-uid.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/ch-uid",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/ch-uid/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "uid": "CHE-105.829.940",
+    "uidFormatValid": true,
+    "found": true,
+    "isActive": true,
+    "name": "Migros-Genossenschafts-Bund",
+    "legalForm": "Cooperative (Genossenschaft)",
+    "vat": {
+      "registered": true,
+      "active": true
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/ch-uid/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # ch-uid-batch
 
@@ -865,6 +1269,39 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch?uids
   "results": []
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/ch-uid-batch.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/ch-uid-batch",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "count": 2,
+    "found": 2,
+    "invalidFormat": 0,
+    "results": []
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # dvf-price-m2
@@ -929,6 +1366,41 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2?addr
 }
 ```
 
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/dvf-price-m2.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/dvf-price-m2",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "found": true,
+    "geocodedLabel": "10 Rue de la Paix 75002 Paris",
+    "apartmentMedianPricePerM2": 12857,
+    "apartmentSales": 381,
+    "houseMedianPricePerM2": 17846,
+    "houseSales": 12
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # bodacc-health
 
@@ -988,6 +1460,40 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health?sir
   "lastNoticeDate": "2026-09-02"
 }
 ```
+
+## Free demo / sample
+
+The original gateway does not serve `?demo=1`. A labelled sample is published on this hub.
+
+```bash
+curl -sS "https://agent-hub.dentreprise.workers.dev/demo/bodacc-health.json"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/bodacc-health",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/",
+  "how_to_get_live_data": "Call the live URL on the original gateway with an x402 v2 client (@x402/fetch or the Python package x402). This file is a labelled sample only.",
+  "sample": {
+    "siren": "552032534",
+    "found": true,
+    "name": "DANONE",
+    "noticesTotal": 107,
+    "lastNoticeDate": "2026-09-02"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # x402-compliance
@@ -1058,6 +1564,48 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-compliance?u
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/x402-compliance?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev%2Fapi%2Ffx%3Ffrom%3DEUR%26to%3DUSD&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/x402-compliance",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "verdict": "compliant",
+    "score": 100,
+    "summary": {
+      "pass": 14,
+      "warn": 0,
+      "fail": 0
+    },
+    "checks": [
+      {
+        "id": "status_402",
+        "status": "pass"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # a2a-agent-card
 
@@ -1124,6 +1672,41 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card?ur
   "issues": []
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card?url=https%3A%2F%2Fexample.com&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/a2a-agent-card",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "mode": "validate",
+    "spec_version_detected": "1.0",
+    "valid": true,
+    "errors": 0,
+    "warnings": 1,
+    "issues": []
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # mcp-manifest-lint
@@ -1192,6 +1775,46 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint?manifest=%5Bobject+Object%5D&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/mcp-manifest-lint",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "kind": "server_json",
+    "valid": true,
+    "errors": 0,
+    "warnings": 1,
+    "registry_ready": false,
+    "issues": [
+      {
+        "level": "warning",
+        "path": "$schema"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # x402-manifest-from-openapi
@@ -1271,6 +1894,52 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-fro
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&payTo=0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7&price=0.001&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/x402-manifest-from-openapi",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "operations": 19,
+    "routes": [
+      {
+        "method": "GET",
+        "path": "/pet/{petId}",
+        "accepts": [
+          {
+            "scheme": "exact",
+            "amount": "1000"
+          }
+        ]
+      }
+    ],
+    "well_known_x402": {
+      "version": 1,
+      "resources": []
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # pubmed-search
 
@@ -1340,6 +2009,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/pubmed-search?q=x
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/pubmed-search?q=x402+OR+%22agent+payments%22&max=3&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/pubmed-search",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "total": 1234,
+    "count": 3,
+    "articles": [
+      {
+        "pmid": "38000000",
+        "title": "…",
+        "doi": "10.…",
+        "abstract": "…"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # x402-listing-check
 
@@ -1403,6 +2111,43 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-listing-chec
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/x402-listing-check",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "verdict": "valid",
+    "resources_count": 14,
+    "probes": [
+      {
+        "status": 402,
+        "ok": true
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # lei-lookup
@@ -1468,6 +2213,41 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/lei-lookup?lei=96
   "ultimate_parent": null
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/lei-lookup?lei=969500KMUQ2B6CBAF162&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/lei-lookup",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "lei": "969500KMUQ2B6CBAF162",
+    "found": true,
+    "legal_name": "DANONE",
+    "status": "ACTIVE",
+    "jurisdiction": "FR",
+    "ultimate_parent": null
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # rss-to-json
@@ -1538,6 +2318,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/rss-to-json?url=h
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/rss-to-json?url=https%3A%2F%2Fhnrss.org%2Ffrontpage&limit=10&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/rss-to-json",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "format": "rss 2.0",
+    "title": "Hacker News: Front Page",
+    "count": 10,
+    "items": [
+      {
+        "title": "…",
+        "link": "…",
+        "published": "2026-11-10T12:00:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # eori-validate
 
@@ -1602,6 +2421,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/eori-validate?eor
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/eori-validate?eori=FR55203253400019&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/eori-validate",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/eori-validate/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "count": 1,
+    "valid": 0,
+    "results": [
+      {
+        "eori": "FR55203253400019",
+        "valid": false,
+        "status": "Not valid",
+        "registry": "EU EOS (European Commission)"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/eori-validate/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # sec-financials
@@ -1674,6 +2532,48 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/sec-financials?ti
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/sec-financials?ticker=AAPL&years=3&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/sec-financials",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/sec-financials/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "cik": "0000320193",
+    "name": "Apple Inc.",
+    "metrics": {
+      "revenue": {
+        "unit": "USD",
+        "annual": [
+          {
+            "period_end": "2026-09-26",
+            "value": 0
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/sec-financials/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # openfoodfacts-product
 
@@ -1732,6 +2632,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-pro
   "nutriscore": "e"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product?barcode=3017624010701&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/openfoodfacts-product",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "found": true,
+    "name": "Nutella",
+    "brands": "Ferrero",
+    "nutriscore": "e"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # arxiv-search
@@ -1800,6 +2733,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/arxiv-search?q=ag
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/arxiv-search?q=agent+payments&max=3&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/arxiv-search",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "total": 120,
+    "count": 3,
+    "papers": [
+      {
+        "id": "2501.00001v1",
+        "title": "…",
+        "pdf_url": "https://arxiv.org/pdf/2501.00001v1"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # crossref-doi
 
@@ -1858,6 +2829,38 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/crossref-doi?doi=
   "container": "Nature"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/crossref-doi?doi=10.1038%2Fnature12373&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/crossref-doi",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "found": true,
+    "title": "Nanometre-scale thermometry in a living cell",
+    "container": "Nature"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # gtin-validate
@@ -1918,6 +2921,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/gtin-validate?gti
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/gtin-validate?gtin=3017624010701&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/gtin-validate",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "type": "EAN-13",
+    "valid": true,
+    "gtin14": "03017624010701",
+    "gs1_prefix_region": "France & Monaco"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # isbn-validate
 
@@ -1975,6 +3011,38 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/isbn-validate?isb
   "isbn10": "2070368223"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/isbn-validate?isbn=978-2-07-036822-8&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/isbn-validate",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "format": "ISBN-13",
+    "valid": true,
+    "isbn10": "2070368223"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # mcp-inspect
@@ -2035,6 +3103,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect?url=h
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect?url=https%3A%2F%2Fexample.com%2Fmcp&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/mcp-inspect",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "reachable": true,
+    "healthy": true,
+    "protocol_version": "2025-06-18",
+    "tools_count": 12
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # openapi-lint
 
@@ -2094,6 +3195,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openapi-lint?url=
   "warnings": 4
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/openapi-lint?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/openapi-lint",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "agent_readiness_score": 78,
+    "operations": 19,
+    "errors": 0,
+    "warnings": 4
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # sitemap-urls
@@ -2160,6 +3294,43 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls?url=
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls?url=https%3A%2F%2Fwww.sitemaps.org%2Fsitemap.xml&limit=50&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/sitemap-urls",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "type": "urlset",
+    "count": 50,
+    "urls": [
+      {
+        "loc": "https://…",
+        "lastmod": "2026-01-01"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # tz-convert
@@ -2231,6 +3402,48 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/tz-convert?time=2
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/tz-convert?time=2026-03-29T02%3A30&from=Europe%2FParis&to=America%2FNew_York%2CAsia%2FTokyo&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/tz-convert",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/tz-convert/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "status": "ok",
+    "results": [
+      {
+        "utc": "2026-11-10T15:00:00.000Z",
+        "targets": [
+          {
+            "zone": "Asia/Tokyo",
+            "local": "2026-11-11T00:00:00",
+            "offset": "+09:00"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/tz-convert/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # uuid-v7
 
@@ -2293,6 +3506,40 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/uuid-v7?count=3"
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/uuid-v7?count=3&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/uuid-v7",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "version": 7,
+    "count": 3,
+    "uuids": [
+      "019a6f2e-…"
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # siren-check
 
@@ -2350,6 +3597,38 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/siren-check?siren
   "vat_number_fr": "FR27552032534"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/siren-check?siren=552032534&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/siren-check",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/siren-check/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "type": "SIREN",
+    "valid": true,
+    "vat_number_fr": "FR27552032534"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/siren-check/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # phone-parse
@@ -2410,6 +3689,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/phone-parse?phone
   "type": "FIXED_LINE"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/phone-parse?phone=%2B33+1+23+45+67+89&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/phone-parse",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/phone-parse/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "valid": true,
+    "e164": "+33123456789",
+    "country": "FR",
+    "type": "FIXED_LINE"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/phone-parse/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # x402-facilitator-health
@@ -2475,6 +3787,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health?network=eip155%3A8453&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/x402-facilitator-health",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "checked": 4,
+    "alive": 3,
+    "results": [
+      {
+        "facilitator": "https://facilitator.xpay.sh",
+        "alive": true,
+        "supports_v2": true
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # json-schema-validate
@@ -2544,6 +3894,46 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/json-schema-valid
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate?schema=%5Bobject+Object%5D&data=%7B%22age%22%3A+%2242%22%7D&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/json-schema-validate",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "$.age",
+        "msg": "expected integer, got string"
+      }
+    ],
+    "repaired": {
+      "age": 42
+    },
+    "repaired_valid": true
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # wikidata-entity
 
@@ -2610,6 +4000,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity?q
   }
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity?q=Annecy&lang=fr&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/wikidata-entity",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "id": "Q50189",
+    "label": "Annecy",
+    "claims": {
+      "country": [
+        {
+          "id": "Q142",
+          "label": "France"
+        }
+      ]
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # fr-communes
@@ -2680,6 +4109,46 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fr-communes?name=
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/fr-communes?name=Annecy&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fr-communes",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-communes/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "count": 1,
+    "results": [
+      {
+        "name": "Annecy",
+        "insee": "74010",
+        "population": 132117,
+        "department": {
+          "code": "74"
+        }
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fr-communes/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # fx-history
 
@@ -2748,6 +4217,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fx-history?from=E
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/fx-history?from=EUR&to=USD&start=2026-01-01&end=2026-03-31&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fx-history",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fx-history/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "observations": 63,
+    "series": {
+      "USD": {
+        "stats": {
+          "min": 1.16,
+          "max": 1.19,
+          "change_pct": 1.2
+        }
+      }
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fx-history/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # fr-school-calendar
 
@@ -2814,6 +4322,43 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fr-school-calenda
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar?zone=A&year=2026-2027&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fr-school-calendar",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "school_year": "2026-2027",
+    "count": 6,
+    "periods": [
+      {
+        "description": "Vacances de la Toussaint",
+        "start_local": "2026-10-17"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # openapi-to-mcp
 
@@ -2879,6 +4424,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp?ur
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/openapi-to-mcp",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "count": 19,
+    "tools": [
+      {
+        "name": "getPetById",
+        "inputSchema": {
+          "type": "object"
+        }
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # sanctions-check
@@ -2950,6 +4533,46 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/sanctions-check?n
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/sanctions-check?name=Bank+Rossiya&type=entity&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/sanctions-check",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/sanctions-check/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "query": "Bank Rossiya",
+    "match": true,
+    "highest_score": 1,
+    "hits": [
+      {
+        "list": "eu",
+        "name": "Bank Rossiya",
+        "score": 1,
+        "programmes": "UKR"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/sanctions-check/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # fr-legal-status
 
@@ -3015,6 +4638,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fr-legal-status?s
   "risk": "none_found"
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/fr-legal-status?siren=552032534&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fr-legal-status",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-legal-status/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "siren": "552032534",
+    "company": {
+      "name": "DANONE",
+      "status": "active"
+    },
+    "collective_proceedings": {
+      "count": 0,
+      "ongoing": false
+    },
+    "risk": "none_found"
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fr-legal-status/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # eu-tenders
@@ -3084,6 +4746,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/eu-tenders?q=logi
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/eu-tenders?q=logiciel&since=2026-11-01&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/eu-tenders",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-tenders/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "count": 20,
+    "results": [
+      {
+        "source": "TED",
+        "title": "Software development services",
+        "buyer": "…",
+        "deadline": "2026-12-01"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/eu-tenders/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # uk-postcode
 
@@ -3145,6 +4845,40 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/uk-postcode?postc
   "lon": -0.1416
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/uk-postcode?postcode=SW1A+1AA&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/uk-postcode",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/uk-postcode/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "valid": true,
+    "postcode": "SW1A 1AA",
+    "admin_district": "Westminster",
+    "lat": 51.501,
+    "lon": -0.1416
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/uk-postcode/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # eu-address
@@ -3213,6 +4947,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/eu-address?addres
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/eu-address?address=Damrak+1+Amsterdam&country=NL&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/eu-address",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-address/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "country": "NL",
+    "count": 1,
+    "results": [
+      {
+        "label": "Damrak 1, 1012LG Amsterdam",
+        "postcode": "1012LG",
+        "lat": 52.37,
+        "lon": 4.89
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/eu-address/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # no-company
 
@@ -3273,6 +5046,39 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/no-company?orgnr=
   "bankrupt": false
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/no-company?orgnr=923609016&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/no-company",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/no-company/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "found": true,
+    "name": "EQUINOR ASA",
+    "vat_registered": true,
+    "bankrupt": false
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/no-company/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # fi-company
@@ -3338,6 +5144,43 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fi-company?busine
   ]
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/fi-company?business_id=0112038-9&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/fi-company",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/fi-company/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "total": 1,
+    "results": [
+      {
+        "business_id": "0112038-9",
+        "name": "Nokia Oyj",
+        "vat_number": "FI01120389"
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/fi-company/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # uk-company
@@ -3405,6 +5248,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/uk-company?compan
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/uk-company?company_number=00445790&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/uk-company",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/uk-company/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "found": true,
+    "name": "TESCO PLC",
+    "status": "active",
+    "officers": {
+      "active": 12
+    },
+    "filing": {
+      "accounts_overdue": false
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/uk-company/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # kyb-check-uk
 
@@ -3469,6 +5350,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/kyb-check-uk?comp
   }
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/kyb-check-uk?company_number=00445790&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/kyb-check-uk",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/kyb-check-uk/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "verdict": "pass",
+    "flags": [],
+    "company": {
+      "name": "TESCO PLC",
+      "status": "active"
+    },
+    "sanctions": {
+      "match": false
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/kyb-check-uk/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # eu-carbon-customs
@@ -3539,6 +5458,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/eu-carbon-customs
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/eu-carbon-customs?cn=72081000&country=CN&tonnes=100&price_eur=75&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/eu-carbon-customs",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-carbon-customs/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "cn": "72081000",
+    "country_table": "China",
+    "items": [
+      {
+        "description": "Flat-rolled products…",
+        "total": 2.5,
+        "total_with_markup": 2.75,
+        "embedded_emissions_t": 275
+      }
+    ]
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/eu-carbon-customs/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # kyb-check-eu
 
@@ -3605,6 +5563,45 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/kyb-check-eu?vat=
 }
 ```
 
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/kyb-check-eu?vat=FR27552032534&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/kyb-check-eu",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/kyb-check-eu/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "vat": "FR27552032534",
+    "verdict": "pass",
+    "flags": [],
+    "vies": {
+      "valid": true,
+      "name": "SA DANONE"
+    },
+    "sanctions": {
+      "match": false
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/kyb-check-eu/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
 
 # kyb-check-fr
 
@@ -3668,6 +5665,44 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/kyb-check-fr?sire
   }
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/kyb-check-fr?siren=552032534&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/kyb-check-fr",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "siren": "552032534",
+    "verdict": "pass",
+    "flags": [],
+    "vat": {
+      "valid": true
+    },
+    "sanctions": {
+      "match": false
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # supplier-due-diligence
@@ -3741,6 +5776,267 @@ curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/supplier-due-dili
   }
 }
 ```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/supplier-due-diligence?name=Nokia+Oyj&country=FI&vat=FI01120389&demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/supplier-due-diligence",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "verdict": "pass",
+    "flags": [],
+    "vat": {
+      "valid": true
+    },
+    "lei": {
+      "candidates": [
+        {
+          "lei": "…",
+          "status": "ACTIVE"
+        }
+      ]
+    },
+    "sanctions": {
+      "match": false
+    }
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
+
+# playbook-x402-seller
+
+> Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller (GET or POST)
+- Price: 3 USDC on Base (3000000 atomic USDC)
+- MCP tool: playbook_x402_seller
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/
+
+## Parameters
+
+(none)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller?"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller",
+    "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "title": "Become an x402 seller on Cloudflare Workers",
+  "toc": [
+    "1. What an unpaid caller must see",
+    "2. The Worker paywall (x402 v2, exact, USDC on Base)",
+    "3. Settle only after a successful handler",
+    "4. Facilitator choice, without putting secrets in the repo",
+    "5. Discovery files agents actually fetch",
+    "6. Cloudflare account, D1, and a failed KV attempt",
+    "7. Verify before you list the endpoint"
+  ],
+  "body": "Full playbook after payment."
+}
+```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller?demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/playbook-x402-seller",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "title": "Become an x402 seller on Cloudflare Workers",
+    "toc": [
+      "1. What an unpaid caller must see",
+      "2. The Worker paywall (x402 v2, exact, USDC on Base)",
+      "3. Settle only after a successful handler",
+      "4. Facilitator choice, without putting secrets in the repo",
+      "5. Discovery files agents actually fetch",
+      "6. Cloudflare account, D1, and a failed KV attempt",
+      "7. Verify before you list the endpoint"
+    ],
+    "excerpt": "An unpaid GET or POST on a paid path must return HTTP 402 with an x402 v2 body (and usually a PAYMENT-REQUIRED header). The body needs x402Version: 2, a resource object, and accepts[] entries whose scheme is exact, network is the CAIP-2 id eip155:8453 (Base), amount is atomic USDC (6 decimals — 0.001 USDC is \"1000\"), and payTo is your receiving address. A free 200, or a forged payment header, must never unlock the resource. The rest of this playbook shows how we wired that on a Cloudflare Worker with @x402/core and @x402/evm, when we settle, how we publish discovery files, and the account/storage mistakes we actually hit.",
+    "demo": true,
+    "demo_label": "DEMO / excerpt — not the full playbook."
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/playbook-x402-seller/ and https://agent-hub.dentreprise.workers.dev/quickstart/
+
+
+# playbook-mcp-publish
+
+> Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish (GET or POST)
+- Price: 3 USDC on Base (3000000 atomic USDC)
+- MCP tool: playbook_mcp_publish
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/
+
+## Parameters
+
+(none)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish?"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish",
+    "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "title": "Build and publish an MCP server to the official registry",
+  "toc": [
+    "1. What you are publishing",
+    "2. The official publisher is a Go CLI, not the npm name",
+    "3. A valid server.json",
+    "4. Login with a GitHub token (no browser required)",
+    "5. Stdio package versus the hosted remote",
+    "6. Version bumps and expired tokens",
+    "7. Check that the version is live"
+  ],
+  "body": "Full playbook after payment."
+}
+```
+
+## Free demo / sample
+
+This tool accepts `?demo=1` on the wave-1 worker (labelled sample, HTTP 200, not live data). The first 3 successful real calls per IP per UTC day are also free.
+
+```bash
+curl -sS "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish?demo=1"
+```
+
+```json
+{
+  "demo": true,
+  "demo_label": "DEMO / SAMPLE — not live data. This is a labelled example response and was not charged.",
+  "charged": false,
+  "tool": "/api/playbook-mcp-publish",
+  "docs": "https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/",
+  "how_to_get_live_data": "Call the same URL without demo=1. The first 3 successful real calls per IP per UTC day are free; after that attach an x402 v2 PAYMENT-SIGNATURE (USDC on Base).",
+  "sample": {
+    "title": "Build and publish an MCP server to the official registry",
+    "toc": [
+      "1. What you are publishing",
+      "2. The official publisher is a Go CLI, not the npm name",
+      "3. A valid server.json",
+      "4. Login with a GitHub token (no browser required)",
+      "5. Stdio package versus the hosted remote",
+      "6. Version bumps and expired tokens",
+      "7. Check that the version is live"
+    ],
+    "excerpt": "The official publisher is the Go CLI mcp-publisher from the modelcontextprotocol/registry GitHub releases, not the npm package that happens to be named mcp-publisher (that one starts an MCP stdio server). You write a server.json that validates against the official 2025-12-11 schema, log in with mcp-publisher login github --token and a GitHub PAT (this works without a browser), then mcp-publisher publish. Names use the io.github.<org>/<server> namespace; the description field is capped at 100 characters. The rest of this playbook covers remotes versus a stdio package, version bumps, and the expired-token error we had to fix.",
+    "demo": true,
+    "demo_label": "DEMO / excerpt — not the full playbook."
+  }
+}
+```
+
+## Clients
+
+- JS (x402 v2): `@x402/fetch` + `@x402/evm` (`wrapFetchWithPaymentFromConfig`, `ExactEvmScheme`). The older package `x402-fetch` is deprecated v1.
+- Python: PyPI package `x402` (`x402HttpxClient` or `x402_requests`, `register_exact_evm_client`, `EthAccountSigner`).
+- MCP: stdio `node src/server.mjs` in [forge-agent-mcp](https://github.com/forge-agent-hub/forge-agent-mcp); hosted Streamable HTTP at https://x402-gateway.forge-x402.workers.dev/mcp (original gateway tools).
+- LangChain: wrap those clients with `DynamicStructuredTool` (`@langchain/core`) or `@tool` (`langchain_core`).
+- Copy-paste snippets: https://agent-hub.dentreprise.workers.dev/tools/playbook-mcp-publish/ and https://agent-hub.dentreprise.workers.dev/quickstart/
 
 
 # Swiss UID / VAT validator

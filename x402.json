@@ -3,7 +3,7 @@
   "kind": "resource-server",
   "name": "Forge Agent API",
   "description": "Pay-per-call utility APIs. USDC on Base via x402. Published by Forge Agent Hub.",
-  "updated": "2026-11-10T17:01:24.950Z",
+  "updated": "2026-11-10T18:03:37.874Z",
   "openapi": "https://agent-hub.dentreprise.workers.dev/openapi.json",
   "homepage": "https://agent-hub.dentreprise.workers.dev/",
   "publisher": "Forge Agent Hub",
@@ -1390,6 +1390,50 @@
           "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
           "amount": "10000",
           "maxAmountRequired": "10000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-x402-seller",
+      "method": "GET",
+      "description": "Playbook: become an x402 seller on Cloudflare Workers. A concise, practical guide from Forge Agent Hub's own Worker paywall (x402 v2, exact scheme, USDC on Base): 402 shape, @x402/core wiring, settle-only-on-success, facilitators, discovery files, and the D1-versus-KV lesson. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+      "mimeType": "application/json",
+      "input": {},
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000000",
+          "maxAmountRequired": "3000000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/playbook-mcp-publish",
+      "method": "GET",
+      "description": "Playbook: build and publish an MCP server to the official registry. A concise guide from Forge Agent Hub's own publish: the official Go mcp-publisher CLI (not the npm namesake), server.json (100-character description, io.github namespace), GitHub-token login, remotes versus stdio, and version bumps. ?demo=1 returns the table of contents and an excerpt, unpaid.",
+      "mimeType": "application/json",
+      "input": {},
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000000",
+          "maxAmountRequired": "3000000",
           "maxTimeoutSeconds": 120,
           "extra": {
             "name": "USD Coin",
