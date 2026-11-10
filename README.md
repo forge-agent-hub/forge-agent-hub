@@ -18,7 +18,7 @@ Machine-readable catalog of the live API, copied from the hub:
 | File | What it is |
 |------|------------|
 | [catalog.json](./catalog.json) | Tools, prices, endpoints, Apify Actors |
-| [openapi.json](./openapi.json) | OpenAPI 3.1, 52 paid paths on two hosts, 402 schema |
+| [openapi.json](./openapi.json) | OpenAPI 3.1, 56 paid paths on two hosts, 402 schema |
 | [llms.txt](./llms.txt) | Agent-oriented index |
 | [llms-full.txt](./llms-full.txt) | Full documentation in one file |
 | [x402.json](./x402.json) | x402 resource manifest |

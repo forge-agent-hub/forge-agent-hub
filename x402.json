@@ -3,7 +3,7 @@
   "kind": "resource-server",
   "name": "Forge Agent API",
   "description": "Pay-per-call utility APIs. USDC on Base via x402. Published by Forge Agent Hub.",
-  "updated": "2026-11-10T16:33:42.090Z",
+  "updated": "2026-11-10T17:01:24.950Z",
   "openapi": "https://agent-hub.dentreprise.workers.dev/openapi.json",
   "homepage": "https://agent-hub.dentreprise.workers.dev/",
   "publisher": "Forge Agent Hub",
@@ -1250,6 +1250,105 @@
       ]
     },
     {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/uk-company",
+      "method": "GET",
+      "description": "UK company register (official Companies House API): search by name, or lookup by company number with profile (status, type, incorporation/dissolution, SIC codes, registered office, previous names), officer counts (active/resigned) and filing status (accounts and confirmation statement due/overdue), insolvency, liquidation and charges flags.",
+      "mimeType": "application/json",
+      "input": {
+        "company_number": "00445790"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-uk",
+      "method": "GET",
+      "description": "One-call KYB for a UK company (company number or name): Companies House profile, officers and filing status, insolvency/liquidation flags, plus sanctions screening (US CSL/OFAC, EU, FR, UK) of the registered name, with a pass/review/fail verdict and flags.",
+      "mimeType": "application/json",
+      "input": {
+        "company_number": "00445790"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "10000",
+          "maxAmountRequired": "10000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/eu-carbon-customs",
+      "method": "GET",
+      "description": "EU CBAM (carbon border adjustment) default embedded emissions for a CN/TARIC code and country of origin, from the official Commission default-values file: direct, indirect and total tCO2e per tonne, production route, year mark-up, and optional embedded emissions and certificate cost for a shipment (tonnes, EUR price).",
+      "mimeType": "application/json",
+      "input": {
+        "cn": "72081000",
+        "country": "CN",
+        "tonnes": "100",
+        "price_eur": "75"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-eu",
+      "method": "GET",
+      "description": "One-call KYB for any EU company by VAT number: VIES validity with registered name/address, sanctions screening (US CSL/OFAC, EU, FR, UK) of the name, GLEIF LEI candidates, plus national register data for France (Sirene + BODACC proceedings) and Finland (PRH), with a pass/review/fail verdict.",
+      "mimeType": "application/json",
+      "input": {
+        "vat": "FR27552032534"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "10000",
+          "maxAmountRequired": "10000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
       "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-fr",
       "method": "GET",
       "description": "One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.",
@@ -1276,7 +1375,7 @@
     {
       "url": "https://forge-tools.dentreprise.workers.dev/api/supplier-due-diligence",
       "method": "GET",
-      "description": "Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.",
+      "description": "Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, UK Companies House profile when country=GB, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.",
       "mimeType": "application/json",
       "input": {
         "name": "Nokia Oyj",

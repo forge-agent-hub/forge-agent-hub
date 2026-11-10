@@ -64,8 +64,12 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [eu-address](https://agent-hub.dentreprise.workers.dev/tools/eu-address/index.md): 0.002 USDC — Address geocoding and normalisation through official national open services: France (Base Adresse Nationale), Netherlands (PDOK/BAG), Spain (CartoCiudad/IGN), Switzerland (swisstopo).
 - [no-company](https://agent-hub.dentreprise.workers.dev/tools/no-company/index.md): 0.002 USDC — Norwegian company register (Brønnøysundregistrene) by org number or name: legal form, registration and founding dates, VAT registration and VAT number, bankruptcy, liquidation and forced-dissolution flags, employees, industry, address, website.
 - [fi-company](https://agent-hub.dentreprise.workers.dev/tools/fi-company/index.md): 0.002 USDC — Finnish company register (PRH / YTJ open data) by Business ID (Y-tunnus) or name: current name, registration date, legal form, status, trade-register status, main business line, address, website, EUID and derived VAT number.
+- [uk-company](https://agent-hub.dentreprise.workers.dev/tools/uk-company/index.md): 0.002 USDC — UK company register (official Companies House API): search by name, or lookup by company number with profile (status, type, incorporation/dissolution, SIC codes, registered office, previous names), officer counts (active/resigned) and filing status (accounts and confirmation statement due/overdue), insolvency, liquidation and charges flags.
+- [kyb-check-uk](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-uk/index.md): 0.01 USDC — One-call KYB for a UK company (company number or name): Companies House profile, officers and filing status, insolvency/liquidation flags, plus sanctions screening (US CSL/OFAC, EU, FR, UK) of the registered name, with a pass/review/fail verdict and flags.
+- [eu-carbon-customs](https://agent-hub.dentreprise.workers.dev/tools/eu-carbon-customs/index.md): 0.003 USDC — EU CBAM (carbon border adjustment) default embedded emissions for a CN/TARIC code and country of origin, from the official Commission default-values file: direct, indirect and total tCO2e per tonne, production route, year mark-up, and optional embedded emissions and certificate cost for a shipment (tonnes, EUR price).
+- [kyb-check-eu](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-eu/index.md): 0.01 USDC — One-call KYB for any EU company by VAT number: VIES validity with registered name/address, sanctions screening (US CSL/OFAC, EU, FR, UK) of the name, GLEIF LEI candidates, plus national register data for France (Sirene + BODACC proceedings) and Finland (PRH), with a pass/review/fail verdict.
 - [kyb-check-fr](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/index.md): 0.01 USDC — One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.
-- [supplier-due-diligence](https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/index.md): 0.01 USDC — Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.
+- [supplier-due-diligence](https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/index.md): 0.01 USDC — Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, UK Companies House profile when country=GB, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.
 
 ## Apify Actors
 
@@ -76,7 +80,7 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 52 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 56 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.
