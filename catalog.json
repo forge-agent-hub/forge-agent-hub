@@ -1,0 +1,882 @@
+{
+  "name": "Forge Agent Hub",
+  "publisher": "Forge Agent Hub",
+  "contact": "jqfpxwv7@mail.grokbot.com",
+  "apiBase": "https://x402-gateway.forge-x402.workers.dev",
+  "updated": "2026-11-10T15:29:35.755Z",
+  "payment": {
+    "protocol": "x402",
+    "version": 2,
+    "scheme": "exact",
+    "network": "eip155:8453",
+    "networkName": "Base",
+    "asset": "USDC",
+    "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7"
+  },
+  "loyalty": {
+    "status": "planned",
+    "active": false,
+    "crediting": "not_fed",
+    "rule": "every_10_paid_calls_1_credit",
+    "credit_unit": "one_free_call",
+    "scope": "payer_address",
+    "endpoint": "GET /loyalty/{address}",
+    "implementation": "hub_d1_read_only",
+    "description": "A read endpoint exists on this hub. The x402 gateway runs on another Cloudflare account and does not write settlements here, so paidCount and credits stay at zero until a feed is implemented. This is not a live credits programme."
+  },
+  "tool_requests": {
+    "status": "live",
+    "active": true,
+    "challenge": "GET /request-tool/challenge",
+    "endpoint": "POST /request-tool",
+    "count": "GET /request-tool/count",
+    "proof": "sha256_proof_of_work",
+    "proof_detail": "GET a short-lived challenge, then find a nonce such that sha256(utf8(challenge + nonce)) has N leading zero hex digits. An optional x402 payment field is stored as unverified; this hub cannot settle or verify payments."
+  },
+  "mcp": {
+    "transport": "streamable-http",
+    "url": "https://x402-gateway.forge-x402.workers.dev/mcp",
+    "name": "forge-agent-api",
+    "version": "1.1.0",
+    "note": "Served by the API gateway."
+  },
+  "tools": [
+    {
+      "id": "fr-company",
+      "kind": "x402",
+      "title": "fr-company",
+      "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
+      "path": "/api/fr-company",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "fr_company",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-company/",
+      "category": "Company data",
+      "price": {
+        "amount": 0.005,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "5000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "danone"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Company name, SIREN (9 digits) or SIRET (14 digits)"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      },
+      "exampleResponse": {
+        "results": [
+          {
+            "siren": "552032534",
+            "name": "DANONE",
+            "naf": "70.10Z",
+            "hq_address": "59-61 RUE LA FAYETTE 75009 PARIS",
+            "active": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "eu-vat",
+      "kind": "x402",
+      "title": "eu-vat",
+      "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
+      "path": "/api/eu-vat",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "eu_vat",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-vat/",
+      "category": "Tax & identifiers",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "vat": "FR40303265045"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "vat": {
+            "type": "string",
+            "description": "VAT number with 2-letter country prefix, e.g. FR40303265045"
+          }
+        },
+        "required": [
+          "vat"
+        ]
+      },
+      "exampleResponse": {
+        "valid": true,
+        "country": "FR",
+        "number": "40303265045",
+        "name": "SA SODIMAS"
+      }
+    },
+    {
+      "id": "iban",
+      "kind": "x402",
+      "title": "iban",
+      "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
+      "path": "/api/iban",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "iban",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/iban/",
+      "category": "Tax & identifiers",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "iban": "FR7630006000011234567890189"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "iban": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "iban"
+        ]
+      },
+      "exampleResponse": {
+        "valid": true,
+        "country": "FR",
+        "iban": "FR7630006000011234567890189",
+        "bban": "30006000011234567890189"
+      }
+    },
+    {
+      "id": "markdown",
+      "kind": "x402",
+      "title": "markdown",
+      "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
+      "path": "/api/markdown",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "markdown",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/markdown/",
+      "category": "Web & domain",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/HTTP_402"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "http(s) URL of a public page"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "url": "https://example.com",
+        "title": "Example Domain",
+        "markdown": "# Example Domain\n..."
+      }
+    },
+    {
+      "id": "fr-address",
+      "kind": "x402",
+      "title": "fr-address",
+      "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
+      "path": "/api/fr-address",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "fr_address",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-address/",
+      "category": "France property & address",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "8 bd du port 95000 cergy"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Free-text French address"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      },
+      "exampleResponse": {
+        "results": [
+          {
+            "label": "8 Boulevard du Port 95000 Cergy",
+            "postcode": "95000",
+            "city": "Cergy",
+            "citycode": "95127",
+            "lat": 49.03,
+            "lon": 2.06,
+            "score": 0.95
+          }
+        ]
+      }
+    },
+    {
+      "id": "holidays",
+      "kind": "x402",
+      "title": "holidays",
+      "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
+      "path": "/api/holidays",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "holidays",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/holidays/",
+      "category": "Reference data",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "country": "FR",
+        "year": "2026"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string",
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          "year": {
+            "type": "string",
+            "description": "4-digit year"
+          },
+          "date": {
+            "type": "string",
+            "description": "optional YYYY-MM-DD to test"
+          }
+        },
+        "required": [
+          "country"
+        ]
+      },
+      "exampleResponse": {
+        "country": "FR",
+        "year": 2026,
+        "count": 11,
+        "holidays": [
+          {
+            "date": "2026-01-01",
+            "name": "New Year's Day",
+            "local_name": "Jour de l'an"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fx",
+      "kind": "x402",
+      "title": "fx",
+      "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
+      "path": "/api/fx",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "fx",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fx/",
+      "category": "Reference data",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "from": "EUR",
+        "to": "USD",
+        "amount": "100"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "description": "optional YYYY-MM-DD historical rate"
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ]
+      },
+      "exampleResponse": {
+        "from": "EUR",
+        "to": "USD",
+        "amount": 100,
+        "rate": 1.1267,
+        "result": 112.67,
+        "date": "2026-11-04",
+        "source": "ECB"
+      }
+    },
+    {
+      "id": "web-meta",
+      "kind": "x402",
+      "title": "web-meta",
+      "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
+      "path": "/api/web-meta",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "web_meta",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/web-meta/",
+      "category": "Web & domain",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/HTTP_402"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "url": "https://example.com",
+        "status": 200,
+        "title": "Example Domain",
+        "description": null,
+        "og": {},
+        "feeds": []
+      }
+    },
+    {
+      "id": "email-check",
+      "kind": "x402",
+      "title": "email-check",
+      "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
+      "path": "/api/email-check",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "email_check",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/email-check/",
+      "category": "Web & domain",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "email": "postmaster@gmail.com"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "exampleResponse": {
+        "email": "contact@example.com",
+        "syntax_ok": true,
+        "domain": "example.com",
+        "has_mx": true,
+        "mx": [
+          "mx.example.com"
+        ],
+        "disposable": false,
+        "role_account": true
+      }
+    },
+    {
+      "id": "rdap",
+      "kind": "x402",
+      "title": "rdap",
+      "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
+      "path": "/api/rdap",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "rdap",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/rdap/",
+      "category": "Web & domain",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "domain": "wikipedia.org"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      },
+      "exampleResponse": {
+        "domain": "EXAMPLE.COM",
+        "registrar": "RESERVED-Internet Assigned Numbers Authority",
+        "created": "1995-08-14T04:00:00Z",
+        "expires": "2026-08-13T04:00:00Z",
+        "age_days": 11400,
+        "nameservers": [
+          "A.IANA-SERVERS.NET"
+        ]
+      }
+    },
+    {
+      "id": "ch-uid",
+      "kind": "x402",
+      "title": "ch-uid",
+      "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
+      "path": "/api/ch-uid",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "ch_uid",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/ch-uid/",
+      "category": "Company data",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "uid": "CHE-105.829.940"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "description": "Swiss UID, e.g. CHE-105.829.940 or CHE105829940 MWST"
+          }
+        },
+        "required": [
+          "uid"
+        ]
+      },
+      "exampleResponse": {
+        "uid": "CHE-105.829.940",
+        "uidFormatValid": true,
+        "found": true,
+        "isActive": true,
+        "name": "Migros-Genossenschafts-Bund",
+        "legalForm": "Cooperative (Genossenschaft)",
+        "vat": {
+          "registered": true,
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "ch-uid-batch",
+      "kind": "x402",
+      "title": "ch-uid-batch",
+      "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
+      "path": "/api/ch-uid-batch",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "ch_uid_batch",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/",
+      "category": "Company data",
+      "price": {
+        "amount": 0.05,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "50000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "uids": "CHE-105.829.940,CHE-105.909.036"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "uids": {
+            "type": "string",
+            "description": "Up to 25 Swiss UIDs, comma/space/newline separated (POST may also send a JSON array)"
+          }
+        },
+        "required": [
+          "uids"
+        ]
+      },
+      "exampleResponse": {
+        "count": 2,
+        "found": 2,
+        "invalidFormat": 0,
+        "results": []
+      }
+    },
+    {
+      "id": "dvf-price-m2",
+      "kind": "x402",
+      "title": "dvf-price-m2",
+      "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
+      "path": "/api/dvf-price-m2",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "dvf_price_m2",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/",
+      "category": "France property & address",
+      "price": {
+        "amount": 0.01,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "10000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "address": "10 rue de la Paix, Paris"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "French street address"
+          },
+          "propertyType": {
+            "type": "string",
+            "description": "optional: Appartement or Maison"
+          },
+          "surface": {
+            "type": "number",
+            "description": "optional surface in m2 for an estimate"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "exampleResponse": {
+        "found": true,
+        "geocodedLabel": "10 Rue de la Paix 75002 Paris",
+        "apartmentMedianPricePerM2": 12857,
+        "apartmentSales": 381,
+        "houseMedianPricePerM2": 17846,
+        "houseSales": 12
+      }
+    },
+    {
+      "id": "bodacc-health",
+      "kind": "x402",
+      "title": "bodacc-health",
+      "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
+      "path": "/api/bodacc-health",
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "mcp_tool": "bodacc_health",
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/",
+      "category": "Company data",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "siren": "552032534"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siren": {
+            "type": "string",
+            "description": "SIREN (9 digits) or SIRET (14 digits)"
+          }
+        },
+        "required": [
+          "siren"
+        ]
+      },
+      "exampleResponse": {
+        "siren": "552032534",
+        "found": true,
+        "name": "DANONE",
+        "noticesTotal": 107,
+        "lastNoticeDate": "2026-09-02"
+      }
+    }
+  ],
+  "actors": [
+    {
+      "id": "swiss-uid-vat-validator",
+      "kind": "apify",
+      "title": "Swiss UID / VAT validator",
+      "description": "Bulk Swiss UID/VAT (MWST/TVA/IVA) validation and company lookup against the official federal UID register. Detects VAT groups, checks the check digit offline, and redacts sole-proprietor names by default.",
+      "url": "https://apify.com/characteristic_division/swiss-uid-vat-validator",
+      "public": true,
+      "docs": "https://agent-hub.dentreprise.workers.dev/actors/swiss-uid-vat-validator/",
+      "category": "Company data",
+      "source": "Swiss Federal Statistical Office UID-Register (uid-wse), official, no auth, about 20 lookups/min.",
+      "pricing": {
+        "model": "pay-per-event",
+        "events": [
+          {
+            "event": "registry-record",
+            "price_usd": 0.003,
+            "primary": true
+          },
+          {
+            "event": "format-check",
+            "price_usd": 0.0005
+          },
+          {
+            "event": "apify-actor-start",
+            "price_usd": 0.001
+          }
+        ],
+        "notes": "Invalid numbers that fail the check digit are charged as format-check only. Errors are free."
+      },
+      "related_x402": [
+        "/api/ch-uid",
+        "/api/ch-uid-batch"
+      ]
+    },
+    {
+      "id": "dvf-price-per-m2-batch",
+      "kind": "apify",
+      "title": "DVF price per m² (batch)",
+      "description": "For a list of French addresses or coordinates, returns median, P25 and P75 €/m² from official DVF sales (apartments and houses separately), with an optional value range for a given surface. Alsace-Moselle and Mayotte are flagged and not charged.",
+      "url": "https://apify.com/characteristic_division/dvf-price-per-m2-batch",
+      "public": true,
+      "docs": "https://agent-hub.dentreprise.workers.dev/actors/dvf-price-per-m2-batch/",
+      "category": "France property & address",
+      "source": "geo-dvf CSVs on files.data.gouv.fr (Etalab, Licence Ouverte 2.0) and the Base Adresse Nationale geocoder.",
+      "pricing": {
+        "model": "pay-per-event",
+        "events": [
+          {
+            "event": "address-report",
+            "price_usd": 0.01,
+            "primary": true
+          },
+          {
+            "event": "apify-actor-start",
+            "price_usd": 0.001
+          }
+        ],
+        "notes": "Failures are free."
+      },
+      "related_x402": [
+        "/api/dvf-price-m2",
+        "/api/fr-address"
+      ]
+    },
+    {
+      "id": "bodacc-siren-health-check",
+      "kind": "apify",
+      "title": "BODACC SIREN health check",
+      "description": "Batch check of SIREN/SIRET/FR-VAT numbers against official BODACC notices: insolvency stage and history, strike-off, late accounts, business sales, and an explained risk level. Sole traders are masked by default.",
+      "url": "https://apify.com/characteristic_division/bodacc-siren-health-check",
+      "public": true,
+      "docs": "https://agent-hub.dentreprise.workers.dev/actors/bodacc-siren-health-check/",
+      "category": "Company data",
+      "source": "BODACC open-data API (DILA, Opendatasoft, Licence Ouverte 2.0), no key required.",
+      "pricing": {
+        "model": "pay-per-event",
+        "events": [
+          {
+            "event": "siren-report",
+            "price_usd": 0.003,
+            "primary": true
+          },
+          {
+            "event": "empty-check",
+            "price_usd": 0.0005
+          },
+          {
+            "event": "apify-actor-start",
+            "price_usd": 0.001
+          }
+        ],
+        "notes": "Invalid input and errors are free."
+      },
+      "related_x402": [
+        "/api/bodacc-health",
+        "/api/fr-company"
+      ]
+    },
+    {
+      "id": "sheets-sync-service-account",
+      "kind": "apify",
+      "title": "Google Sheets sync (service account)",
+      "description": "Import, export, append and upsert Google Sheets rows with a service account (no OAuth expiry). The buyer provides their own key. Cell values default to RAW to reduce formula injection risk.",
+      "url": "https://apify.com/characteristic_division/sheets-sync-service-account",
+      "public": true,
+      "docs": "https://agent-hub.dentreprise.workers.dev/actors/sheets-sync-service-account/",
+      "category": "Integrations",
+      "source": "Google Sheets API v4, authenticated with the buyer's service account.",
+      "pricing": {
+        "model": "pay-per-event",
+        "events": [
+          {
+            "event": "rows-1000",
+            "price_usd": 0.002,
+            "primary": true
+          },
+          {
+            "event": "apify-actor-start",
+            "price_usd": 0.005
+          }
+        ],
+        "notes": "Charged per 1,000 rows processed. The buyer must share the sheet with the service account."
+      },
+      "related_x402": []
+    }
+  ]
+}

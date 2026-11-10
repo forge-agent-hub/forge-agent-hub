@@ -1,0 +1,352 @@
+{
+  "x402Version": 2,
+  "kind": "resource-server",
+  "name": "Forge Agent API",
+  "description": "Pay-per-call utility APIs. USDC on Base via x402. Published by Forge Agent Hub.",
+  "updated": "2026-11-10T15:29:35.755Z",
+  "openapi": "https://agent-hub.dentreprise.workers.dev/openapi.json",
+  "homepage": "https://agent-hub.dentreprise.workers.dev/",
+  "publisher": "Forge Agent Hub",
+  "resources": [
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+      "method": "GET",
+      "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
+      "mimeType": "application/json",
+      "input": {
+        "q": "danone"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "5000",
+          "maxAmountRequired": "5000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+      "method": "GET",
+      "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
+      "mimeType": "application/json",
+      "input": {
+        "vat": "FR40303265045"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+      "method": "GET",
+      "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
+      "mimeType": "application/json",
+      "input": {
+        "iban": "FR7630006000011234567890189"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+      "method": "GET",
+      "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/HTTP_402"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+      "method": "GET",
+      "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
+      "mimeType": "application/json",
+      "input": {
+        "q": "8 bd du port 95000 cergy"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+      "method": "GET",
+      "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
+      "mimeType": "application/json",
+      "input": {
+        "country": "FR",
+        "year": "2026"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+      "method": "GET",
+      "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
+      "mimeType": "application/json",
+      "input": {
+        "from": "EUR",
+        "to": "USD",
+        "amount": "100"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+      "method": "GET",
+      "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://en.wikipedia.org/wiki/HTTP_402"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+      "method": "GET",
+      "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
+      "mimeType": "application/json",
+      "input": {
+        "email": "postmaster@gmail.com"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+      "method": "GET",
+      "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
+      "mimeType": "application/json",
+      "input": {
+        "domain": "wikipedia.org"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+      "method": "GET",
+      "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
+      "mimeType": "application/json",
+      "input": {
+        "uid": "CHE-105.829.940"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+      "method": "GET",
+      "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
+      "mimeType": "application/json",
+      "input": {
+        "uids": "CHE-105.829.940,CHE-105.909.036"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "50000",
+          "maxAmountRequired": "50000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+      "method": "GET",
+      "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
+      "mimeType": "application/json",
+      "input": {
+        "address": "10 rue de la Paix, Paris"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "10000",
+          "maxAmountRequired": "10000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+      "method": "GET",
+      "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
+      "mimeType": "application/json",
+      "input": {
+        "siren": "552032534"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    }
+  ],
+  "_comment": "Manifest follows draft-hawkins-x402-dns-discovery (/.well-known/x402, x402Version, kind, resources[]) and the resource/accepts shape used by x402 Bazaar listings. Amounts are atomic USDC units (6 decimals). The live API also historically served a shorter list at the same path and a richer copy at /.well-known/x402.json; this hub file is the combined form."
+}

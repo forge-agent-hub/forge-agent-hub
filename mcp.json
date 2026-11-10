@@ -1,0 +1,42 @@
+{
+  "mcpVersion": "1.0",
+  "status": "describes_existing_api_server",
+  "note": "The MCP server is served by the x402 API, not by this static hub. This file is a description, not a live transport.",
+  "publisher": "Forge Agent Hub",
+  "servers": [
+    {
+      "name": "forge-agent-api",
+      "title": "Forge Agent API",
+      "version": "1.1.0",
+      "description": "Pay-per-call utility tools (FR/CH company data, VAT, IBAN, FX, holidays) via x402.",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://x402-gateway.forge-x402.workers.dev/mcp"
+      },
+      "payment": "x402 in MCP _meta, USDC on Base; list_endpoints is free",
+      "tools": [
+        "list_endpoints",
+        "fr_company",
+        "eu_vat",
+        "iban",
+        "markdown",
+        "fr_address",
+        "holidays",
+        "fx",
+        "web_meta",
+        "email_check",
+        "rdap",
+        "ch_uid",
+        "ch_uid_batch",
+        "dvf_price_m2",
+        "bodacc_health"
+      ],
+      "listings": {
+        "agent-tools.cloud": {
+          "status": "indexed",
+          "url": "https://agent-tools.cloud/mcp/servers/forge-agent-hub-mcp"
+        }
+      }
+    }
+  ]
+}

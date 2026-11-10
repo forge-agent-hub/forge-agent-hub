@@ -1,0 +1,991 @@
+# Forge Agent Hub
+
+> Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Call an endpoint unpaid to receive a 402 challenge, then retry with PAYMENT-SIGNATURE or X-PAYMENT.
+
+API base: https://x402-gateway.forge-x402.workers.dev
+payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
+Network: eip155:8453 (Base)
+Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+MCP (Streamable HTTP): https://x402-gateway.forge-x402.workers.dev/mcp
+Contact: jqfpxwv7@mail.grokbot.com
+
+The tool-request form is live (SHA-256 proof of work). Loyalty credits are planned only: GET /loyalty/{address} exists but the ledger is not fed from the payment gateway.
+
+## x402 endpoints
+
+- [fr-company](https://agent-hub.dentreprise.workers.dev/tools/fr-company/index.md): 0.005 USDC — French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.
+- [eu-vat](https://agent-hub.dentreprise.workers.dev/tools/eu-vat/index.md): 0.003 USDC — EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).
+- [iban](https://agent-hub.dentreprise.workers.dev/tools/iban/index.md): 0.001 USDC — IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.
+- [markdown](https://agent-hub.dentreprise.workers.dev/tools/markdown/index.md): 0.002 USDC — Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title.
+- [fr-address](https://agent-hub.dentreprise.workers.dev/tools/fr-address/index.md): 0.002 USDC — French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.
+- [holidays](https://agent-hub.dentreprise.workers.dev/tools/holidays/index.md): 0.001 USDC — Official public holidays for a country and year (100+ countries, Nager.
+- [fx](https://agent-hub.dentreprise.workers.dev/tools/fx/index.md): 0.001 USDC — Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date.
+- [web-meta](https://agent-hub.dentreprise.workers.dev/tools/web-meta/index.md): 0.002 USDC — Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s.
+- [email-check](https://agent-hub.dentreprise.workers.dev/tools/email-check/index.md): 0.001 USDC — Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.
+- [rdap](https://agent-hub.dentreprise.workers.dev/tools/rdap/index.md): 0.002 USDC — Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.
+- [ch-uid](https://agent-hub.dentreprise.workers.dev/tools/ch-uid/index.md): 0.003 USDC — Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse).
+- [ch-uid-batch](https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/index.md): 0.05 USDC — Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register.
+- [dvf-price-m2](https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/index.md): 0.01 USDC — French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale.
+- [bodacc-health](https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/index.md): 0.003 USDC — French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary.
+
+## Apify Actors
+
+- [Swiss UID / VAT validator](https://agent-hub.dentreprise.workers.dev/actors/swiss-uid-vat-validator/index.md): Apify Actor, https://apify.com/characteristic_division/swiss-uid-vat-validator
+- [DVF price per m² (batch)](https://agent-hub.dentreprise.workers.dev/actors/dvf-price-per-m2-batch/index.md): Apify Actor, https://apify.com/characteristic_division/dvf-price-per-m2-batch
+- [BODACC SIREN health check](https://agent-hub.dentreprise.workers.dev/actors/bodacc-siren-health-check/index.md): Apify Actor, https://apify.com/characteristic_division/bodacc-siren-health-check
+- [Google Sheets sync (service account)](https://agent-hub.dentreprise.workers.dev/actors/sheets-sync-service-account/index.md): Apify Actor, https://apify.com/characteristic_division/sheets-sync-service-account
+
+## Machine-readable
+
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 14 paid paths, 402 challenge schema, x-payment extension.
+- [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
+- [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
+- [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.
+- [llms-full.txt](https://agent-hub.dentreprise.workers.dev/llms-full.txt): full documentation in one file.
+- [Payment notes](https://agent-hub.dentreprise.workers.dev/docs/payment/index.md)
+- [MCP notes](https://agent-hub.dentreprise.workers.dev/docs/mcp/index.md)
+
+## Optional
+
+- [Loyalty (planned, ledger not fed)](https://agent-hub.dentreprise.workers.dev/docs/loyalty/index.md)
+- [Request a tool](https://agent-hub.dentreprise.workers.dev/request/index.md)
+
+
+---
+
+# Full documentation
+
+# Payment (x402)
+
+API base: https://x402-gateway.forge-x402.workers.dev
+Network: eip155:8453 (Base)
+Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
+
+Call GET or POST without a payment header, read the 402 body and PAYMENT-REQUIRED header, then retry with PAYMENT-SIGNATURE or X-PAYMENT, or use @x402/fetch. Amounts in accepts[].amount are atomic USDC units (6 decimals).
+
+
+# MCP
+
+Streamable HTTP, stateless, served by the API at https://x402-gateway.forge-x402.workers.dev/mcp.
+Server name: forge-agent-api (1.1.0).
+Tools: list_endpoints (free); paid tools: fr_company, eu_vat, iban, markdown, fr_address, holidays, fx, web_meta, email_check, rdap, ch_uid, ch_uid_batch, dvf_price_m2, bodacc_health.
+Payment in MCP _meta via @x402/mcp. Also listed on agent-tools.cloud.
+
+
+# fr-company
+
+> French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/fr-company (GET or POST)
+- Price: 0.005 USDC on Base (5000 atomic USDC)
+- MCP tool: fr_company
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fr-company/
+
+## Parameters
+
+- `q` (string, required): Company name, SIREN (9 digits) or SIRET (14 digits)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fr-company?q=danone"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+    "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "5000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "results": [
+    {
+      "siren": "552032534",
+      "name": "DANONE",
+      "naf": "70.10Z",
+      "hq_address": "59-61 RUE LA FAYETTE 75009 PARIS",
+      "active": true
+    }
+  ]
+}
+```
+
+
+# eu-vat
+
+> EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/eu-vat (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: eu_vat
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/eu-vat/
+
+## Parameters
+
+- `vat` (string, required): VAT number with 2-letter country prefix, e.g. FR40303265045
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/eu-vat?vat=FR40303265045"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+    "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "valid": true,
+  "country": "FR",
+  "number": "40303265045",
+  "name": "SA SODIMAS"
+}
+```
+
+
+# iban
+
+> IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/iban (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: iban
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/iban/
+
+## Parameters
+
+- `iban` (string, required): iban
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/iban?iban=FR7630006000011234567890189"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+    "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "valid": true,
+  "country": "FR",
+  "iban": "FR7630006000011234567890189",
+  "bban": "30006000011234567890189"
+}
+```
+
+
+# markdown
+
+> Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/markdown (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: markdown
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/markdown/
+
+## Parameters
+
+- `url` (string, required): http(s) URL of a public page
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/markdown?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHTTP_402"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+    "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "url": "https://example.com",
+  "title": "Example Domain",
+  "markdown": "# Example Domain\n..."
+}
+```
+
+
+# fr-address
+
+> French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/fr-address (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: fr_address
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fr-address/
+
+## Parameters
+
+- `q` (string, required): Free-text French address
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fr-address?q=8+bd+du+port+95000+cergy"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+    "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "results": [
+    {
+      "label": "8 Boulevard du Port 95000 Cergy",
+      "postcode": "95000",
+      "city": "Cergy",
+      "citycode": "95127",
+      "lat": 49.03,
+      "lon": 2.06,
+      "score": 0.95
+    }
+  ]
+}
+```
+
+
+# holidays
+
+> Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/holidays (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: holidays
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/holidays/
+
+## Parameters
+
+- `country` (string, required): ISO 3166-1 alpha-2 country code
+- `year` (string): 4-digit year
+- `date` (string): optional YYYY-MM-DD to test
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/holidays?country=FR&year=2026"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+    "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "country": "FR",
+  "year": 2026,
+  "count": 11,
+  "holidays": [
+    {
+      "date": "2026-01-01",
+      "name": "New Year's Day",
+      "local_name": "Jour de l'an"
+    }
+  ]
+}
+```
+
+
+# fx
+
+> Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/fx (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: fx
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fx/
+
+## Parameters
+
+- `from` (string, required): from
+- `to` (string, required): to
+- `amount` (string): amount
+- `date` (string): optional YYYY-MM-DD historical rate
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/fx?from=EUR&to=USD&amount=100"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+    "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "from": "EUR",
+  "to": "USD",
+  "amount": 100,
+  "rate": 1.1267,
+  "result": 112.67,
+  "date": "2026-11-04",
+  "source": "ECB"
+}
+```
+
+
+# web-meta
+
+> Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/web-meta (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: web_meta
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/web-meta/
+
+## Parameters
+
+- `url` (string, required): url
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/web-meta?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FHTTP_402"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+    "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "url": "https://example.com",
+  "status": 200,
+  "title": "Example Domain",
+  "description": null,
+  "og": {},
+  "feeds": []
+}
+```
+
+
+# email-check
+
+> Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/email-check (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: email_check
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/email-check/
+
+## Parameters
+
+- `email` (string, required): email
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/email-check?email=postmaster%40gmail.com"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+    "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "email": "contact@example.com",
+  "syntax_ok": true,
+  "domain": "example.com",
+  "has_mx": true,
+  "mx": [
+    "mx.example.com"
+  ],
+  "disposable": false,
+  "role_account": true
+}
+```
+
+
+# rdap
+
+> Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/rdap (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: rdap
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/rdap/
+
+## Parameters
+
+- `domain` (string, required): domain
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/rdap?domain=wikipedia.org"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+    "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "domain": "EXAMPLE.COM",
+  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+  "created": "1995-08-14T04:00:00Z",
+  "expires": "2026-08-13T04:00:00Z",
+  "age_days": 11400,
+  "nameservers": [
+    "A.IANA-SERVERS.NET"
+  ]
+}
+```
+
+
+# ch-uid
+
+> Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/ch-uid (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: ch_uid
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/ch-uid/
+
+## Parameters
+
+- `uid` (string, required): Swiss UID, e.g. CHE-105.829.940 or CHE105829940 MWST
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/ch-uid?uid=CHE-105.829.940"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+    "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "uid": "CHE-105.829.940",
+  "uidFormatValid": true,
+  "found": true,
+  "isActive": true,
+  "name": "Migros-Genossenschafts-Bund",
+  "legalForm": "Cooperative (Genossenschaft)",
+  "vat": {
+    "registered": true,
+    "active": true
+  }
+}
+```
+
+
+# ch-uid-batch
+
+> Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch (GET or POST)
+- Price: 0.05 USDC on Base (50000 atomic USDC)
+- MCP tool: ch_uid_batch
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/
+
+## Parameters
+
+- `uids` (string, required): Up to 25 Swiss UIDs, comma/space/newline separated (POST may also send a JSON array)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch?uids=CHE-105.829.940%2CCHE-105.909.036"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+    "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "50000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "count": 2,
+  "found": 2,
+  "invalidFormat": 0,
+  "results": []
+}
+```
+
+
+# dvf-price-m2
+
+> French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2 (GET or POST)
+- Price: 0.01 USDC on Base (10000 atomic USDC)
+- MCP tool: dvf_price_m2
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/
+
+## Parameters
+
+- `address` (string, required): French street address
+- `propertyType` (string): optional: Appartement or Maison
+- `surface` (number): optional surface in m2 for an estimate
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2?address=10+rue+de+la+Paix%2C+Paris"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+    "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "10000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "found": true,
+  "geocodedLabel": "10 Rue de la Paix 75002 Paris",
+  "apartmentMedianPricePerM2": 12857,
+  "apartmentSales": 381,
+  "houseMedianPricePerM2": 17846,
+  "houseSales": 12
+}
+```
+
+
+# bodacc-health
+
+> French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.
+
+- URL: https://x402-gateway.forge-x402.workers.dev/api/bodacc-health (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: bodacc_health
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/
+
+## Parameters
+
+- `siren` (string, required): SIREN (9 digits) or SIRET (14 digits)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health?siren=552032534"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+    "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "siren": "552032534",
+  "found": true,
+  "name": "DANONE",
+  "noticesTotal": 107,
+  "lastNoticeDate": "2026-09-02"
+}
+```
+
+
+# Swiss UID / VAT validator
+
+> Bulk Swiss UID/VAT (MWST/TVA/IVA) validation and company lookup against the official federal UID register. Detects VAT groups, checks the check digit offline, and redacts sole-proprietor names by default.
+
+- Store: https://apify.com/characteristic_division/swiss-uid-vat-validator
+- Pricing: pay-per-event (registry-record 0.003 USDC, format-check 0.001 USDC, apify-actor-start 0.001 USDC)
+- Source: Swiss Federal Statistical Office UID-Register (uid-wse), official, no auth, about 20 lookups/min.
+- Docs: https://agent-hub.dentreprise.workers.dev/actors/swiss-uid-vat-validator/
+
+
+# DVF price per m² (batch)
+
+> For a list of French addresses or coordinates, returns median, P25 and P75 €/m² from official DVF sales (apartments and houses separately), with an optional value range for a given surface. Alsace-Moselle and Mayotte are flagged and not charged.
+
+- Store: https://apify.com/characteristic_division/dvf-price-per-m2-batch
+- Pricing: pay-per-event (address-report 0.01 USDC, apify-actor-start 0.001 USDC)
+- Source: geo-dvf CSVs on files.data.gouv.fr (Etalab, Licence Ouverte 2.0) and the Base Adresse Nationale geocoder.
+- Docs: https://agent-hub.dentreprise.workers.dev/actors/dvf-price-per-m2-batch/
+
+
+# BODACC SIREN health check
+
+> Batch check of SIREN/SIRET/FR-VAT numbers against official BODACC notices: insolvency stage and history, strike-off, late accounts, business sales, and an explained risk level. Sole traders are masked by default.
+
+- Store: https://apify.com/characteristic_division/bodacc-siren-health-check
+- Pricing: pay-per-event (siren-report 0.003 USDC, empty-check 0.001 USDC, apify-actor-start 0.001 USDC)
+- Source: BODACC open-data API (DILA, Opendatasoft, Licence Ouverte 2.0), no key required.
+- Docs: https://agent-hub.dentreprise.workers.dev/actors/bodacc-siren-health-check/
+
+
+# Google Sheets sync (service account)
+
+> Import, export, append and upsert Google Sheets rows with a service account (no OAuth expiry). The buyer provides their own key. Cell values default to RAW to reduce formula injection risk.
+
+- Store: https://apify.com/characteristic_division/sheets-sync-service-account
+- Pricing: pay-per-event (rows-1000 0.002 USDC, apify-actor-start 0.005 USDC)
+- Source: Google Sheets API v4, authenticated with the buyer's service account.
+- Docs: https://agent-hub.dentreprise.workers.dev/actors/sheets-sync-service-account/
+
+
+# Loyalty (planned)
+
+Not a live programme. GET /loyalty/{address} reads this hub's KV. The x402 gateway is on another account and does not feed the ledger.

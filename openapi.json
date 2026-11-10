@@ -1,0 +1,5085 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Forge Agent API",
+    "version": "1.0.0",
+    "summary": "Pay-per-call utility APIs for agents and developers. USDC on Base via x402. No account, no API key.",
+    "description": "Each paid path accepts GET (query string) or POST (JSON body). Call once without payment to receive an HTTP 402 challenge, then retry with a PAYMENT-SIGNATURE or X-PAYMENT header. Settlement is USDC on Base (eip155:8453), scheme `exact`.\n\nPublished by Forge Agent Hub. Contact: jqfpxwv7@mail.grokbot.com.\n\nThis specification is generated from the live route table. The API base is https://x402-gateway.forge-x402.workers.dev. An MCP server (Streamable HTTP) is exposed at https://x402-gateway.forge-x402.workers.dev/mcp (one tool per path, plus free `list_endpoints`; payment in MCP `_meta`).",
+    "contact": {
+      "name": "Forge Agent Hub",
+      "email": "jqfpxwv7@mail.grokbot.com",
+      "url": "https://agent-hub.dentreprise.workers.dev"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://x402-gateway.forge-x402.workers.dev",
+      "description": "x402 gateway (Cloudflare Worker). Route port is in progress; confirm after the API-stable signal."
+    }
+  ],
+  "tags": [
+    {
+      "name": "x402",
+      "description": "Paid JSON endpoints. Unpaid calls return 402."
+    }
+  ],
+  "paths": {
+    "/api/fr-company": {
+      "get": {
+        "operationId": "fr_company_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises",
+        "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public. Pay-per-call: $0.005 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Company name, SIREN (9 digits) or SIRET (14 digits)"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.005"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "5000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.005"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "5000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "siren": {
+                            "type": "string",
+                            "example": "552032534"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "DANONE"
+                          },
+                          "naf": {
+                            "type": "string",
+                            "example": "70.10Z"
+                          },
+                          "hq_address": {
+                            "type": "string",
+                            "example": "59-61 RUE LA FAYETTE 75009 PARIS"
+                          },
+                          "active": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "results": [
+                    {
+                      "siren": "552032534",
+                      "name": "DANONE",
+                      "naf": "70.10Z",
+                      "hq_address": "59-61 RUE LA FAYETTE 75009 PARIS",
+                      "active": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+                    "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "5000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fr_company",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises (JSON body)",
+        "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public. Pay-per-call: $0.005 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "q": {
+                    "type": "string",
+                    "description": "Company name, SIREN (9 digits) or SIRET (14 digits)"
+                  }
+                },
+                "required": [
+                  "q"
+                ]
+              },
+              "example": {
+                "q": "danone"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.005"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "5000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.005"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "5000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "siren": {
+                            "type": "string",
+                            "example": "552032534"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "DANONE"
+                          },
+                          "naf": {
+                            "type": "string",
+                            "example": "70.10Z"
+                          },
+                          "hq_address": {
+                            "type": "string",
+                            "example": "59-61 RUE LA FAYETTE 75009 PARIS"
+                          },
+                          "active": {
+                            "type": "boolean",
+                            "example": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "results": [
+                    {
+                      "siren": "552032534",
+                      "name": "DANONE",
+                      "naf": "70.10Z",
+                      "hq_address": "59-61 RUE LA FAYETTE 75009 PARIS",
+                      "active": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+                    "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "5000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/eu-vat": {
+      "get": {
+        "operationId": "eu_vat_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address)",
+        "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address). Pay-per-call: $0.003 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "vat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "VAT number with 2-letter country prefix, e.g. FR40303265045"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "number": {
+                      "type": "string",
+                      "example": "40303265045"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "SA SODIMAS"
+                    }
+                  }
+                },
+                "example": {
+                  "valid": true,
+                  "country": "FR",
+                  "number": "40303265045",
+                  "name": "SA SODIMAS"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+                    "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "eu_vat",
+        "tags": [
+          "x402"
+        ],
+        "summary": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address) (JSON body)",
+        "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address). Pay-per-call: $0.003 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "vat": {
+                    "type": "string",
+                    "description": "VAT number with 2-letter country prefix, e.g. FR40303265045"
+                  }
+                },
+                "required": [
+                  "vat"
+                ]
+              },
+              "example": {
+                "vat": "FR40303265045"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "number": {
+                      "type": "string",
+                      "example": "40303265045"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "SA SODIMAS"
+                    }
+                  }
+                },
+                "example": {
+                  "valid": true,
+                  "country": "FR",
+                  "number": "40303265045",
+                  "name": "SA SODIMAS"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+                    "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iban": {
+      "get": {
+        "operationId": "iban_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN",
+        "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN. Pay-per-call: $0.001 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "iban",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "iban"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "iban": {
+                      "type": "string",
+                      "example": "FR7630006000011234567890189"
+                    },
+                    "bban": {
+                      "type": "string",
+                      "example": "30006000011234567890189"
+                    }
+                  }
+                },
+                "example": {
+                  "valid": true,
+                  "country": "FR",
+                  "iban": "FR7630006000011234567890189",
+                  "bban": "30006000011234567890189"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+                    "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "iban",
+        "tags": [
+          "x402"
+        ],
+        "summary": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN (JSON body)",
+        "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN. Pay-per-call: $0.001 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "iban": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "iban"
+                ]
+              },
+              "example": {
+                "iban": "FR7630006000011234567890189"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "iban": {
+                      "type": "string",
+                      "example": "FR7630006000011234567890189"
+                    },
+                    "bban": {
+                      "type": "string",
+                      "example": "30006000011234567890189"
+                    }
+                  }
+                },
+                "example": {
+                  "valid": true,
+                  "country": "FR",
+                  "iban": "FR7630006000011234567890189",
+                  "bban": "30006000011234567890189"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+                    "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/markdown": {
+      "get": {
+        "operationId": "markdown_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title",
+        "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only. Pay-per-call: $0.002 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "http(s) URL of a public page"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "example": "https://example.com"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Example Domain"
+                    },
+                    "markdown": {
+                      "type": "string",
+                      "example": "# Example Domain\n..."
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://example.com",
+                  "title": "Example Domain",
+                  "markdown": "# Example Domain\n..."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+                    "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "markdown",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title (JSON body)",
+        "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only. Pay-per-call: $0.002 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "http(s) URL of a public page"
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              },
+              "example": {
+                "url": "https://en.wikipedia.org/wiki/HTTP_402"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "example": "https://example.com"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Example Domain"
+                    },
+                    "markdown": {
+                      "type": "string",
+                      "example": "# Example Domain\n..."
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://example.com",
+                  "title": "Example Domain",
+                  "markdown": "# Example Domain\n..."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+                    "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fr-address": {
+      "get": {
+        "operationId": "fr_address_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse",
+        "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score. Pay-per-call: $0.002 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Free-text French address"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "example": "8 Boulevard du Port 95000 Cergy"
+                          },
+                          "postcode": {
+                            "type": "string",
+                            "example": "95000"
+                          },
+                          "city": {
+                            "type": "string",
+                            "example": "Cergy"
+                          },
+                          "citycode": {
+                            "type": "string",
+                            "example": "95127"
+                          },
+                          "lat": {
+                            "type": "number",
+                            "example": 49.03
+                          },
+                          "lon": {
+                            "type": "number",
+                            "example": 2.06
+                          },
+                          "score": {
+                            "type": "number",
+                            "example": 0.95
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "results": [
+                    {
+                      "label": "8 Boulevard du Port 95000 Cergy",
+                      "postcode": "95000",
+                      "city": "Cergy",
+                      "citycode": "95127",
+                      "lat": 49.03,
+                      "lon": 2.06,
+                      "score": 0.95
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+                    "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fr_address",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse (JSON body)",
+        "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score. Pay-per-call: $0.002 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "q": {
+                    "type": "string",
+                    "description": "Free-text French address"
+                  }
+                },
+                "required": [
+                  "q"
+                ]
+              },
+              "example": {
+                "q": "8 bd du port 95000 cergy"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "example": "8 Boulevard du Port 95000 Cergy"
+                          },
+                          "postcode": {
+                            "type": "string",
+                            "example": "95000"
+                          },
+                          "city": {
+                            "type": "string",
+                            "example": "Cergy"
+                          },
+                          "citycode": {
+                            "type": "string",
+                            "example": "95127"
+                          },
+                          "lat": {
+                            "type": "number",
+                            "example": 49.03
+                          },
+                          "lon": {
+                            "type": "number",
+                            "example": 2.06
+                          },
+                          "score": {
+                            "type": "number",
+                            "example": 0.95
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "results": [
+                    {
+                      "label": "8 Boulevard du Port 95000 Cergy",
+                      "postcode": "95000",
+                      "city": "Cergy",
+                      "citycode": "95127",
+                      "lat": 49.03,
+                      "lon": 2.06,
+                      "score": 0.95
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+                    "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/holidays": {
+      "get": {
+        "operationId": "holidays_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Official public holidays for a country and year (100+ countries, Nager",
+        "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday. Pay-per-call: $0.001 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "4-digit year"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "optional YYYY-MM-DD to test"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "year": {
+                      "type": "integer",
+                      "example": 2026
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 11
+                    },
+                    "holidays": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "example": "2026-01-01"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "New Year's Day"
+                          },
+                          "local_name": {
+                            "type": "string",
+                            "example": "Jour de l'an"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "country": "FR",
+                  "year": 2026,
+                  "count": 11,
+                  "holidays": [
+                    {
+                      "date": "2026-01-01",
+                      "name": "New Year's Day",
+                      "local_name": "Jour de l'an"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+                    "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "holidays",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Official public holidays for a country and year (100+ countries, Nager (JSON body)",
+        "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday. Pay-per-call: $0.001 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "country": {
+                    "type": "string",
+                    "description": "ISO 3166-1 alpha-2 country code"
+                  },
+                  "year": {
+                    "type": "string",
+                    "description": "4-digit year"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "optional YYYY-MM-DD to test"
+                  }
+                },
+                "required": [
+                  "country"
+                ]
+              },
+              "example": {
+                "country": "FR",
+                "year": "2026"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "country": {
+                      "type": "string",
+                      "example": "FR"
+                    },
+                    "year": {
+                      "type": "integer",
+                      "example": 2026
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 11
+                    },
+                    "holidays": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "example": "2026-01-01"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "New Year's Day"
+                          },
+                          "local_name": {
+                            "type": "string",
+                            "example": "Jour de l'an"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "country": "FR",
+                  "year": 2026,
+                  "count": 11,
+                  "holidays": [
+                    {
+                      "date": "2026-01-01",
+                      "name": "New Year's Day",
+                      "local_name": "Jour de l'an"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+                    "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fx": {
+      "get": {
+        "operationId": "fx_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date",
+        "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies. Pay-per-call: $0.001 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "from"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "to"
+          },
+          {
+            "name": "amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "amount"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "optional YYYY-MM-DD historical rate"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "string",
+                      "example": "EUR"
+                    },
+                    "to": {
+                      "type": "string",
+                      "example": "USD"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "rate": {
+                      "type": "number",
+                      "example": 1.1267
+                    },
+                    "result": {
+                      "type": "number",
+                      "example": 112.67
+                    },
+                    "date": {
+                      "type": "string",
+                      "example": "2026-11-04"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "ECB"
+                    }
+                  }
+                },
+                "example": {
+                  "from": "EUR",
+                  "to": "USD",
+                  "amount": 100,
+                  "rate": 1.1267,
+                  "result": 112.67,
+                  "date": "2026-11-04",
+                  "source": "ECB"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+                    "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fx",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date (JSON body)",
+        "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies. Pay-per-call: $0.001 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string"
+                  },
+                  "to": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "optional YYYY-MM-DD historical rate"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to"
+                ]
+              },
+              "example": {
+                "from": "EUR",
+                "to": "USD",
+                "amount": "100"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "string",
+                      "example": "EUR"
+                    },
+                    "to": {
+                      "type": "string",
+                      "example": "USD"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 100
+                    },
+                    "rate": {
+                      "type": "number",
+                      "example": 1.1267
+                    },
+                    "result": {
+                      "type": "number",
+                      "example": 112.67
+                    },
+                    "date": {
+                      "type": "string",
+                      "example": "2026-11-04"
+                    },
+                    "source": {
+                      "type": "string",
+                      "example": "ECB"
+                    }
+                  }
+                },
+                "example": {
+                  "from": "EUR",
+                  "to": "USD",
+                  "amount": 100,
+                  "rate": 1.1267,
+                  "result": 112.67,
+                  "date": "2026-11-04",
+                  "source": "ECB"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+                    "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/web-meta": {
+      "get": {
+        "operationId": "web_meta_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s",
+        "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only. Pay-per-call: $0.002 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "url"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "example": "https://example.com"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Example Domain"
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "number",
+                        "object",
+                        "array",
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "og": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "feeds": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://example.com",
+                  "status": 200,
+                  "title": "Example Domain",
+                  "description": null,
+                  "og": {},
+                  "feeds": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+                    "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "web_meta",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s (JSON body)",
+        "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only. Pay-per-call: $0.002 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              },
+              "example": {
+                "url": "https://en.wikipedia.org/wiki/HTTP_402"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "example": "https://example.com"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "Example Domain"
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "number",
+                        "object",
+                        "array",
+                        "boolean",
+                        "null"
+                      ]
+                    },
+                    "og": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "feeds": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://example.com",
+                  "status": 200,
+                  "title": "Example Domain",
+                  "description": null,
+                  "og": {},
+                  "feeds": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+                    "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/email-check": {
+      "get": {
+        "operationId": "email_check_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags",
+        "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags. Pay-per-call: $0.001 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "email"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "contact@example.com"
+                    },
+                    "syntax_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "domain": {
+                      "type": "string",
+                      "example": "example.com"
+                    },
+                    "has_mx": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "mx": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "mx.example.com"
+                      }
+                    },
+                    "disposable": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "role_account": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "example": {
+                  "email": "contact@example.com",
+                  "syntax_ok": true,
+                  "domain": "example.com",
+                  "has_mx": true,
+                  "mx": [
+                    "mx.example.com"
+                  ],
+                  "disposable": false,
+                  "role_account": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+                    "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "email_check",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags (JSON body)",
+        "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags. Pay-per-call: $0.001 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              },
+              "example": {
+                "email": "postmaster@gmail.com"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.001"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "1000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "contact@example.com"
+                    },
+                    "syntax_ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "domain": {
+                      "type": "string",
+                      "example": "example.com"
+                    },
+                    "has_mx": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "mx": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "mx.example.com"
+                      }
+                    },
+                    "disposable": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "role_account": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "example": {
+                  "email": "contact@example.com",
+                  "syntax_ok": true,
+                  "domain": "example.com",
+                  "has_mx": true,
+                  "mx": [
+                    "mx.example.com"
+                  ],
+                  "disposable": false,
+                  "role_account": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+                    "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "1000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rdap": {
+      "get": {
+        "operationId": "rdap_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days",
+        "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days. Pay-per-call: $0.002 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "domain"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "example": "EXAMPLE.COM"
+                    },
+                    "registrar": {
+                      "type": "string",
+                      "example": "RESERVED-Internet Assigned Numbers Authority"
+                    },
+                    "created": {
+                      "type": "string",
+                      "example": "1995-08-14T04:00:00Z"
+                    },
+                    "expires": {
+                      "type": "string",
+                      "example": "2026-08-13T04:00:00Z"
+                    },
+                    "age_days": {
+                      "type": "integer",
+                      "example": 11400
+                    },
+                    "nameservers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "A.IANA-SERVERS.NET"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "domain": "EXAMPLE.COM",
+                  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                  "created": "1995-08-14T04:00:00Z",
+                  "expires": "2026-08-13T04:00:00Z",
+                  "age_days": 11400,
+                  "nameservers": [
+                    "A.IANA-SERVERS.NET"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+                    "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "rdap",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days (JSON body)",
+        "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days. Pay-per-call: $0.002 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "domain": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "domain"
+                ]
+              },
+              "example": {
+                "domain": "wikipedia.org"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.002"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "2000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "example": "EXAMPLE.COM"
+                    },
+                    "registrar": {
+                      "type": "string",
+                      "example": "RESERVED-Internet Assigned Numbers Authority"
+                    },
+                    "created": {
+                      "type": "string",
+                      "example": "1995-08-14T04:00:00Z"
+                    },
+                    "expires": {
+                      "type": "string",
+                      "example": "2026-08-13T04:00:00Z"
+                    },
+                    "age_days": {
+                      "type": "integer",
+                      "example": 11400
+                    },
+                    "nameservers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": "A.IANA-SERVERS.NET"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "domain": "EXAMPLE.COM",
+                  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                  "created": "1995-08-14T04:00:00Z",
+                  "expires": "2026-08-13T04:00:00Z",
+                  "age_days": 11400,
+                  "nameservers": [
+                    "A.IANA-SERVERS.NET"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+                    "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "2000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ch-uid": {
+      "get": {
+        "operationId": "ch_uid_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse)",
+        "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked. Pay-per-call: $0.003 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Swiss UID, e.g. CHE-105.829.940 or CHE105829940 MWST"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string",
+                      "example": "CHE-105.829.940"
+                    },
+                    "uidFormatValid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isActive": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Migros-Genossenschafts-Bund"
+                    },
+                    "legalForm": {
+                      "type": "string",
+                      "example": "Cooperative (Genossenschaft)"
+                    },
+                    "vat": {
+                      "type": "object",
+                      "properties": {
+                        "registered": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "uid": "CHE-105.829.940",
+                  "uidFormatValid": true,
+                  "found": true,
+                  "isActive": true,
+                  "name": "Migros-Genossenschafts-Bund",
+                  "legalForm": "Cooperative (Genossenschaft)",
+                  "vat": {
+                    "registered": true,
+                    "active": true
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+                    "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "ch_uid",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse) (JSON body)",
+        "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked. Pay-per-call: $0.003 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uid": {
+                    "type": "string",
+                    "description": "Swiss UID, e.g. CHE-105.829.940 or CHE105829940 MWST"
+                  }
+                },
+                "required": [
+                  "uid"
+                ]
+              },
+              "example": {
+                "uid": "CHE-105.829.940"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string",
+                      "example": "CHE-105.829.940"
+                    },
+                    "uidFormatValid": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isActive": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Migros-Genossenschafts-Bund"
+                    },
+                    "legalForm": {
+                      "type": "string",
+                      "example": "Cooperative (Genossenschaft)"
+                    },
+                    "vat": {
+                      "type": "object",
+                      "properties": {
+                        "registered": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "uid": "CHE-105.829.940",
+                  "uidFormatValid": true,
+                  "found": true,
+                  "isActive": true,
+                  "name": "Migros-Genossenschafts-Bund",
+                  "legalForm": "Cooperative (Genossenschaft)",
+                  "vat": {
+                    "registered": true,
+                    "active": true
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+                    "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ch-uid-batch": {
+      "get": {
+        "operationId": "ch_uid_batch_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register",
+        "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked. Pay-per-call: $0.05 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "uids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Up to 25 Swiss UIDs, comma/space/newline separated (POST may also send a JSON array)"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.05"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "50000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.05"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "50000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "found": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "invalidFormat": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "example": {
+                  "count": 2,
+                  "found": 2,
+                  "invalidFormat": 0,
+                  "results": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+                    "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "50000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "ch_uid_batch",
+        "tags": [
+          "x402"
+        ],
+        "summary": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register (JSON body)",
+        "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked. Pay-per-call: $0.05 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uids": {
+                    "type": "string",
+                    "description": "Up to 25 Swiss UIDs, comma/space/newline separated (POST may also send a JSON array)"
+                  }
+                },
+                "required": [
+                  "uids"
+                ]
+              },
+              "example": {
+                "uids": "CHE-105.829.940,CHE-105.909.036"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.05"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "50000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.05"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "50000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "found": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "invalidFormat": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                },
+                "example": {
+                  "count": 2,
+                  "found": 2,
+                  "invalidFormat": 0,
+                  "results": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+                    "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "50000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dvf-price-m2": {
+      "get": {
+        "operationId": "dvf_price_m2_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale",
+        "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte. Pay-per-call: $0.01 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "French street address"
+          },
+          {
+            "name": "propertyType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "optional: Appartement or Maison"
+          },
+          {
+            "name": "surface",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            },
+            "description": "optional surface in m2 for an estimate"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.01"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "10000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.01"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "10000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "geocodedLabel": {
+                      "type": "string",
+                      "example": "10 Rue de la Paix 75002 Paris"
+                    },
+                    "apartmentMedianPricePerM2": {
+                      "type": "integer",
+                      "example": 12857
+                    },
+                    "apartmentSales": {
+                      "type": "integer",
+                      "example": 381
+                    },
+                    "houseMedianPricePerM2": {
+                      "type": "integer",
+                      "example": 17846
+                    },
+                    "houseSales": {
+                      "type": "integer",
+                      "example": 12
+                    }
+                  }
+                },
+                "example": {
+                  "found": true,
+                  "geocodedLabel": "10 Rue de la Paix 75002 Paris",
+                  "apartmentMedianPricePerM2": 12857,
+                  "apartmentSales": 381,
+                  "houseMedianPricePerM2": 17846,
+                  "houseSales": 12
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+                    "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "10000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "dvf_price_m2",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale (JSON body)",
+        "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte. Pay-per-call: $0.01 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "description": "French street address"
+                  },
+                  "propertyType": {
+                    "type": "string",
+                    "description": "optional: Appartement or Maison"
+                  },
+                  "surface": {
+                    "type": "number",
+                    "description": "optional surface in m2 for an estimate"
+                  }
+                },
+                "required": [
+                  "address"
+                ]
+              },
+              "example": {
+                "address": "10 rue de la Paix, Paris"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.01"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "10000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.01"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "10000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "geocodedLabel": {
+                      "type": "string",
+                      "example": "10 Rue de la Paix 75002 Paris"
+                    },
+                    "apartmentMedianPricePerM2": {
+                      "type": "integer",
+                      "example": 12857
+                    },
+                    "apartmentSales": {
+                      "type": "integer",
+                      "example": 381
+                    },
+                    "houseMedianPricePerM2": {
+                      "type": "integer",
+                      "example": 17846
+                    },
+                    "houseSales": {
+                      "type": "integer",
+                      "example": 12
+                    }
+                  }
+                },
+                "example": {
+                  "found": true,
+                  "geocodedLabel": "10 Rue de la Paix 75002 Paris",
+                  "apartmentMedianPricePerM2": 12857,
+                  "apartmentSales": 381,
+                  "houseMedianPricePerM2": 17846,
+                  "houseSales": 12
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+                    "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "10000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bodacc-health": {
+      "get": {
+        "operationId": "bodacc_health_get",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary",
+        "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked. Pay-per-call: $0.003 USDC on Base (x402). GET uses query parameters.",
+        "parameters": [
+          {
+            "name": "siren",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "SIREN (9 digits) or SIRET (14 digits)"
+          }
+        ],
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "siren": {
+                      "type": "string",
+                      "example": "552032534"
+                    },
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "DANONE"
+                    },
+                    "noticesTotal": {
+                      "type": "integer",
+                      "example": 107
+                    },
+                    "lastNoticeDate": {
+                      "type": "string",
+                      "example": "2026-09-02"
+                    }
+                  }
+                },
+                "example": {
+                  "siren": "552032534",
+                  "found": true,
+                  "name": "DANONE",
+                  "noticesTotal": 107,
+                  "lastNoticeDate": "2026-09-02"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+                    "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "bodacc_health",
+        "tags": [
+          "x402"
+        ],
+        "summary": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary (JSON body)",
+        "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked. Pay-per-call: $0.003 USDC on Base (x402). POST uses a JSON body with the same fields as the GET query.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "siren": {
+                    "type": "string",
+                    "description": "SIREN (9 digits) or SIRET (14 digits)"
+                  }
+                },
+                "required": [
+                  "siren"
+                ]
+              },
+              "example": {
+                "siren": "552032534"
+              }
+            }
+          }
+        },
+        "security": [],
+        "x-payment": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "x-payment-info": {
+          "protocols": [
+            {
+              "x402": {
+                "version": 2
+              }
+            }
+          ],
+          "price": {
+            "mode": "fixed",
+            "currency": "USDC",
+            "amount": "0.003"
+          },
+          "network": "eip155:8453",
+          "networkName": "Base",
+          "asset": "USDC",
+          "assetContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "maxTimeoutSeconds": 120,
+          "atomicAmount": "3000"
+        },
+        "responses": {
+          "200": {
+            "description": "Paid request succeeded. JSON body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "siren": {
+                      "type": "string",
+                      "example": "552032534"
+                    },
+                    "found": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "DANONE"
+                    },
+                    "noticesTotal": {
+                      "type": "integer",
+                      "example": 107
+                    },
+                    "lastNoticeDate": {
+                      "type": "string",
+                      "example": "2026-09-02"
+                    }
+                  }
+                },
+                "example": {
+                  "siren": "552032534",
+                  "found": true,
+                  "name": "DANONE",
+                  "noticesTotal": 107,
+                  "lastNoticeDate": "2026-09-02"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The call was paid (or is being validated) but the input is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). The JSON body (and the PAYMENT-REQUIRED header) is an x402 v2 challenge. accepts[].amount is the price in atomic USDC units (6 decimals). Retry with PAYMENT-SIGNATURE or X-PAYMENT.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded JSON payment requirements (same object as the body accepts[] / x402 challenge).",
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/X402PaymentRequired"
+                },
+                "example": {
+                  "x402Version": 2,
+                  "error": "Payment required",
+                  "resource": {
+                    "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+                    "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
+                    "mimeType": "application/json"
+                  },
+                  "accepts": [
+                    {
+                      "scheme": "exact",
+                      "network": "eip155:8453",
+                      "amount": "3000",
+                      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+                      "maxTimeoutSeconds": 120,
+                      "extra": {
+                        "name": "USD Coin",
+                        "version": "2"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "X402Accept": {
+        "type": "object",
+        "required": [
+          "scheme",
+          "network",
+          "maxAmountRequired",
+          "asset",
+          "payTo"
+        ],
+        "properties": {
+          "scheme": {
+            "type": "string",
+            "example": "exact"
+          },
+          "network": {
+            "type": "string",
+            "example": "eip155:8453",
+            "description": "CAIP-2 network id. Base mainnet is eip155:8453."
+          },
+          "maxAmountRequired": {
+            "type": "string",
+            "description": "Price in atomic token units (USDC has 6 decimals; \"1000\" = 0.001 USDC).",
+            "example": "1000"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Alias of maxAmountRequired used by some manifests.",
+            "example": "1000"
+          },
+          "resource": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string",
+            "example": "application/json"
+          },
+          "payTo": {
+            "type": "string",
+            "example": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7"
+          },
+          "asset": {
+            "type": "string",
+            "example": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            "description": "USDC contract on Base."
+          },
+          "maxTimeoutSeconds": {
+            "type": "integer",
+            "example": 120
+          },
+          "extra": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "USD Coin"
+              },
+              "version": {
+                "type": "string",
+                "example": "2"
+              }
+            }
+          }
+        }
+      },
+      "X402PaymentRequired": {
+        "type": "object",
+        "required": [
+          "x402Version",
+          "accepts"
+        ],
+        "properties": {
+          "x402Version": {
+            "type": "integer",
+            "example": 2,
+            "description": "x402 protocol version spoken by the resource server."
+          },
+          "error": {
+            "type": "string",
+            "example": "X-PAYMENT or PAYMENT-SIGNATURE header is required"
+          },
+          "accepts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/X402Accept"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-x402": {
+    "version": 2,
+    "network": "eip155:8453",
+    "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "assetSymbol": "USDC",
+    "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+    "wellKnown": "/.well-known/x402",
+    "paymentHeaders": [
+      "PAYMENT-SIGNATURE",
+      "X-PAYMENT"
+    ],
+    "paymentRequiredHeader": "PAYMENT-REQUIRED"
+  }
+}
