@@ -3,7 +3,7 @@
   "kind": "resource-server",
   "name": "Forge Agent API",
   "description": "Pay-per-call utility APIs. USDC on Base via x402. Published by Forge Agent Hub.",
-  "updated": "2026-11-10T15:29:35.755Z",
+  "updated": "2026-11-10T15:37:24.056Z",
   "openapi": "https://agent-hub.dentreprise.workers.dev/openapi.json",
   "homepage": "https://agent-hub.dentreprise.workers.dev/",
   "publisher": "Forge Agent Hub",
@@ -330,6 +330,737 @@
       "mimeType": "application/json",
       "input": {
         "siren": "552032534"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-compliance",
+      "method": "GET",
+      "description": "x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource. Returns score, verdict and per-check details.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://x402-gateway.forge-x402.workers.dev/api/fx?from=EUR&to=USD"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card",
+      "method": "GET",
+      "description": "A2A Agent Card validator and generator (A2A 1.0, detects and flags v0.3 cards): supportedInterfaces, protocolBinding/protocolVersion, capabilities, media-type modes, skills, provider, security schemes/requirements, JWS signature structure. Validate by URL (fetches /.well-known/agent-card.json) or inline JSON; or mode=generate from name, description, endpoint and skills.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://example.com"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint",
+      "method": "GET",
+      "description": "MCP manifest linter: validates an MCP registry server.json (official schema 2025-12-11: reverse-DNS name, 100-char description, pinned versions, packages registryType/transport, remotes, env vars, isSecret, fileSha256, additionalProperties) or a host config (mcpServers/servers: command vs url, args, env, hard-coded secrets). Inline JSON or URL.",
+      "mimeType": "application/json",
+      "input": {
+        "manifest": {
+          "name": "io.github.example/weather",
+          "description": "Weather MCP",
+          "version": "1.0.0",
+          "remotes": [
+            {
+              "type": "streamable-http",
+              "url": "https://example.com/mcp"
+            }
+          ]
+        }
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi",
+      "method": "GET",
+      "description": "Turn an OpenAPI 3.x / Swagger 2.0 spec (JSON or YAML, URL or inline) into a ready-to-mount x402 V2 paywall: per-operation accepts[] (exact, CAIP-2 network, atomic USDC amount, payTo, EIP-712 extra), @x402/core route config, Bazaar discovery input/output schemas, a /.well-known/x402 document and a sample PAYMENT-REQUIRED payload.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "price": "0.001"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/pubmed-search",
+      "method": "GET",
+      "description": "PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract. Accepts PubMed query syntax or a list of PMIDs. No API key needed.",
+      "mimeType": "application/json",
+      "input": {
+        "q": "x402 OR \"agent payments\"",
+        "max": "3"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check",
+      "method": "GET",
+      "description": "Checks that a host exposes a valid x402 discovery listing (/.well-known/x402, x402.json, x402-listing): JSON, version, https resource URLs, same host, companions (/openapi.json, /llms.txt), and probes up to 10 listed resources for a real 402 challenge with consistent payTo. Never pays.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://x402-gateway.forge-x402.workers.dev"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/lei-lookup",
+      "method": "GET",
+      "description": "Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country. Returns legal name, status, legal form, jurisdiction, legal and HQ addresses, registration status/renewal, BIC, direct and ultimate parents.",
+      "mimeType": "application/json",
+      "input": {
+        "lei": "969500KMUQ2B6CBAF162"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/rss-to-json",
+      "method": "GET",
+      "description": "RSS 2.0 / RSS 1.0 (RDF) / Atom / JSON Feed to clean JSON: feed title, link, language, updated, items with id, title, link, ISO dates, author, text summary, categories and enclosures (podcasts). URL or inline XML, item cap, `since` filter; HTML pages return discovered feed links.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://hnrss.org/frontpage",
+        "limit": "10"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/eori-validate",
+      "method": "GET",
+      "description": "EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC. Up to 10 numbers per call; returns validity plus name and address when the trader consented to publication.",
+      "mimeType": "application/json",
+      "input": {
+        "eori": "FR55203253400019"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "3000",
+          "maxAmountRequired": "3000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/sec-financials",
+      "method": "GET",
+      "description": "US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings. Any raw us-gaap tag also accepted.",
+      "mimeType": "application/json",
+      "input": {
+        "ticker": "AAPL",
+        "years": "3"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "5000",
+          "maxAmountRequired": "5000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product",
+      "method": "GET",
+      "description": "Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.",
+      "mimeType": "application/json",
+      "input": {
+        "barcode": "3017624010701"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/arxiv-search",
+      "method": "GET",
+      "description": "arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.",
+      "mimeType": "application/json",
+      "input": {
+        "q": "agent payments",
+        "max": "3"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/crossref-doi",
+      "method": "GET",
+      "description": "DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.",
+      "mimeType": "application/json",
+      "input": {
+        "doi": "10.1038/nature12373"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/gtin-validate",
+      "method": "GET",
+      "description": "GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags. Up to 100 codes per call.",
+      "mimeType": "application/json",
+      "input": {
+        "gtin": "3017624010701"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/isbn-validate",
+      "method": "GET",
+      "description": "ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.",
+      "mimeType": "application/json",
+      "input": {
+        "isbn": "978-2-07-036822-8"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect",
+      "method": "GET",
+      "description": "Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts. Read-only: never calls a tool.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://example.com/mcp"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-lint",
+      "method": "GET",
+      "description": "OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples. Returns an agent-readiness score and actionable issues.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls",
+      "method": "GET",
+      "description": "sitemap.xml URL extractor: reads a sitemap or sitemap index (incl. .gz) and up to 10 child sitemaps, returns URLs with lastmod/changefreq/priority, optional substring filter, capped list (up to 5000).",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://www.sitemaps.org/sitemap.xml",
+        "limit": "50"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/tz-convert",
+      "method": "GET",
+      "description": "IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).",
+      "mimeType": "application/json",
+      "input": {
+        "time": "2026-03-29T02:30",
+        "from": "Europe/Paris",
+        "to": "America/New_York,Asia/Tokyo"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/uuid-v7",
+      "method": "GET",
+      "description": "RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).",
+      "mimeType": "application/json",
+      "input": {
+        "count": "3"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/siren-check",
+      "method": "GET",
+      "description": "French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number. Up to 100 numbers. Offline: no register call.",
+      "mimeType": "application/json",
+      "input": {
+        "siren": "552032534"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/phone-parse",
+      "method": "GET",
+      "description": "Phone number parsing and validation to E.164 (libphonenumber numbering plans): validity, country, calling code, type (mobile, fixed line, toll-free…), national/international formats, tel: URI. Up to 50 numbers. No carrier lookup, no call.",
+      "mimeType": "application/json",
+      "input": {
+        "phone": "+33 1 23 45 67 89"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health",
+      "method": "GET",
+      "description": "x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl. CDP, xpay, x402.org, PayAI), reports alive/auth-required, latency, supported kinds (version, scheme, network), V2 and network support, and flags deprecated URLs.",
+      "mimeType": "application/json",
+      "input": {
+        "network": "eip155:8453"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate",
+      "method": "GET",
+      "description": "Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults. Returns errors, repaired JSON and fixes. POST recommended.",
+      "mimeType": "application/json",
+      "input": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "age": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "age"
+          ]
+        },
+        "data": "{\"age\": \"42\"}"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity",
+      "method": "GET",
+      "description": "Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.",
+      "mimeType": "application/json",
+      "input": {
+        "q": "Annecy",
+        "lang": "fr"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fr-communes",
+      "method": "GET",
+      "description": "French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.",
+      "mimeType": "application/json",
+      "input": {
+        "name": "Annecy"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fx-history",
+      "method": "GET",
+      "description": "Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.",
+      "mimeType": "application/json",
+      "input": {
+        "from": "EUR",
+        "to": "USD",
+        "start": "2026-01-01",
+        "end": "2026-03-31"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "2000",
+          "maxAmountRequired": "2000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar",
+      "method": "GET",
+      "description": "French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).",
+      "mimeType": "application/json",
+      "input": {
+        "zone": "A",
+        "year": "2026-2027"
+      },
+      "accepts": [
+        {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "maxAmountRequired": "1000",
+          "maxTimeoutSeconds": 120,
+          "extra": {
+            "name": "USD Coin",
+            "version": "2"
+          }
+        }
+      ]
+    },
+    {
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp",
+      "method": "GET",
+      "description": "Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.",
+      "mimeType": "application/json",
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json"
       },
       "accepts": [
         {

@@ -3,7 +3,8 @@
 Pay-per-call utility APIs for agents and developers. Settlement is USDC on Base via [x402](https://x402.org). No account, no API key.
 
 **Hub:** https://agent-hub.dentreprise.workers.dev  
-**API:** https://x402-gateway.forge-x402.workers.dev  
+**API (original 14 tools):** https://x402-gateway.forge-x402.workers.dev  
+**API (wave-1 tools):** https://forge-tools.dentreprise.workers.dev  
 **MCP (Streamable HTTP):** https://x402-gateway.forge-x402.workers.dev/mcp  
 **Contact:** jqfpxwv7@mail.grokbot.com
 
@@ -16,7 +17,7 @@ Machine-readable catalog of the live API, copied from the hub:
 | File | What it is |
 |------|------------|
 | [catalog.json](./catalog.json) | Tools, prices, endpoints, Apify Actors |
-| [openapi.json](./openapi.json) | OpenAPI 3.1, 14 paid paths, 402 schema |
+| [openapi.json](./openapi.json) | OpenAPI 3.1, 43 paid paths on two hosts, 402 schema |
 | [llms.txt](./llms.txt) | Agent-oriented index |
 | [llms-full.txt](./llms-full.txt) | Full documentation in one file |
 | [x402.json](./x402.json) | x402 resource manifest |

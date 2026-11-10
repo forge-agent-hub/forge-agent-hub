@@ -2,7 +2,8 @@
 
 > Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Call an endpoint unpaid to receive a 402 challenge, then retry with PAYMENT-SIGNATURE or X-PAYMENT.
 
-API base: https://x402-gateway.forge-x402.workers.dev
+API base (original 14 tools): https://x402-gateway.forge-x402.workers.dev
+API base (wave-1 tools): https://forge-tools.dentreprise.workers.dev
 payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
 Network: eip155:8453 (Base)
 Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
@@ -27,6 +28,35 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [ch-uid-batch](https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/index.md): 0.05 USDC — Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register.
 - [dvf-price-m2](https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/index.md): 0.01 USDC — French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale.
 - [bodacc-health](https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/index.md): 0.003 USDC — French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary.
+- [x402-compliance](https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/index.md): 0.002 USDC — x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource.
+- [a2a-agent-card](https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/index.md): 0.002 USDC — A2A Agent Card validator and generator (A2A 1.
+- [mcp-manifest-lint](https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/index.md): 0.002 USDC — MCP manifest linter: validates an MCP registry server.
+- [x402-manifest-from-openapi](https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/index.md): 0.003 USDC — Turn an OpenAPI 3.
+- [pubmed-search](https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/index.md): 0.003 USDC — PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract.
+- [x402-listing-check](https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/index.md): 0.001 USDC — Checks that a host exposes a valid x402 discovery listing (/.
+- [lei-lookup](https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/index.md): 0.003 USDC — Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country.
+- [rss-to-json](https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/index.md): 0.002 USDC — RSS 2.
+- [eori-validate](https://agent-hub.dentreprise.workers.dev/tools/eori-validate/index.md): 0.003 USDC — EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC.
+- [sec-financials](https://agent-hub.dentreprise.workers.dev/tools/sec-financials/index.md): 0.005 USDC — US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings.
+- [openfoodfacts-product](https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/index.md): 0.002 USDC — Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.
+- [arxiv-search](https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/index.md): 0.002 USDC — arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.
+- [crossref-doi](https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/index.md): 0.002 USDC — DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.
+- [gtin-validate](https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/index.md): 0.001 USDC — GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags.
+- [isbn-validate](https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/index.md): 0.001 USDC — ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.
+- [mcp-inspect](https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/index.md): 0.002 USDC — Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts.
+- [openapi-lint](https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/index.md): 0.002 USDC — OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples.
+- [sitemap-urls](https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/index.md): 0.002 USDC — sitemap.
+- [tz-convert](https://agent-hub.dentreprise.workers.dev/tools/tz-convert/index.md): 0.001 USDC — IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).
+- [uuid-v7](https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/index.md): 0.001 USDC — RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).
+- [siren-check](https://agent-hub.dentreprise.workers.dev/tools/siren-check/index.md): 0.001 USDC — French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number.
+- [phone-parse](https://agent-hub.dentreprise.workers.dev/tools/phone-parse/index.md): 0.001 USDC — Phone number parsing and validation to E.
+- [x402-facilitator-health](https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/index.md): 0.001 USDC — x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl.
+- [json-schema-validate](https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/index.md): 0.001 USDC — Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults.
+- [wikidata-entity](https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/index.md): 0.002 USDC — Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.
+- [fr-communes](https://agent-hub.dentreprise.workers.dev/tools/fr-communes/index.md): 0.001 USDC — French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.
+- [fx-history](https://agent-hub.dentreprise.workers.dev/tools/fx-history/index.md): 0.002 USDC — Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.
+- [fr-school-calendar](https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/index.md): 0.001 USDC — French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).
+- [openapi-to-mcp](https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/index.md): 0.003 USDC — Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.
 
 ## Apify Actors
 
@@ -37,7 +67,7 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 14 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 43 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.
@@ -57,7 +87,8 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 # Payment (x402)
 
-API base: https://x402-gateway.forge-x402.workers.dev
+API base (original 14 tools): https://x402-gateway.forge-x402.workers.dev
+API base (wave-1 tools): https://forge-tools.dentreprise.workers.dev
 Network: eip155:8453 (Base)
 Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
 payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
@@ -942,6 +973,1897 @@ curl -sS -D - "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health?sir
   "name": "DANONE",
   "noticesTotal": 107,
   "lastNoticeDate": "2026-09-02"
+}
+```
+
+
+# x402-compliance
+
+> x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource. Returns score, verdict and per-check details.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/x402-compliance (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: x402_compliance
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/
+
+## Parameters
+
+- `url` (string, required): Paid endpoint URL to test
+- `method` (string): GET (default) or POST
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-compliance?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev%2Fapi%2Ffx%3Ffrom%3DEUR%26to%3DUSD"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/x402-compliance",
+    "description": "x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource. Returns score, verdict and per-check details.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "verdict": "compliant",
+  "score": 100,
+  "summary": {
+    "pass": 14,
+    "warn": 0,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "status_402",
+      "status": "pass"
+    }
+  ]
+}
+```
+
+
+# a2a-agent-card
+
+> A2A Agent Card validator and generator (A2A 1.0, detects and flags v0.3 cards): supportedInterfaces, protocolBinding/protocolVersion, capabilities, media-type modes, skills, provider, security schemes/requirements, JWS signature structure. Validate by URL (fetches /.well-known/agent-card.json) or inline JSON; or mode=generate from name, description, endpoint and skills.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: a2a_agent_card
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/
+
+## Parameters
+
+- `url` (string): Agent origin or card URL
+- `card` (object): Inline Agent Card JSON (POST)
+- `mode` (string): validate (default) or generate
+- `name` (string): generate: agent name
+- `description` (string): generate: description
+- `endpoint` (string): generate: A2A endpoint https URL
+- `skills` (string): generate: JSON array or comma-separated skill names
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card?url=https%3A%2F%2Fexample.com"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card",
+    "description": "A2A Agent Card validator and generator (A2A 1.0, detects and flags v0.3 cards): supportedInterfaces, protocolBinding/protocolVersion, capabilities, media-type modes, skills, provider, security schemes/requirements, JWS signature structure. Validate by URL (fetches /.well-known/agent-card.json) or inline JSON; or mode=generate from name, description, endpoint and skills.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "mode": "validate",
+  "spec_version_detected": "1.0",
+  "valid": true,
+  "errors": 0,
+  "warnings": 1,
+  "issues": []
+}
+```
+
+
+# mcp-manifest-lint
+
+> MCP manifest linter: validates an MCP registry server.json (official schema 2025-12-11: reverse-DNS name, 100-char description, pinned versions, packages registryType/transport, remotes, env vars, isSecret, fileSha256, additionalProperties) or a host config (mcpServers/servers: command vs url, args, env, hard-coded secrets). Inline JSON or URL.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: mcp_manifest_lint
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/
+
+## Parameters
+
+- `url` (string): URL of server.json or config
+- `manifest` (object): Inline server.json or host config (POST)
+- `kind` (string): server_json or host_config (auto-detected)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint?manifest=%5Bobject+Object%5D"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint",
+    "description": "MCP manifest linter: validates an MCP registry server.json (official schema 2025-12-11: reverse-DNS name, 100-char description, pinned versions, packages registryType/transport, remotes, env vars, isSecret, fileSha256, additionalProperties) or a host config (mcpServers/servers: command vs url, args, env, hard-coded secrets). Inline JSON or URL.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "kind": "server_json",
+  "valid": true,
+  "errors": 0,
+  "warnings": 1,
+  "registry_ready": false,
+  "issues": [
+    {
+      "level": "warning",
+      "path": "$schema"
+    }
+  ]
+}
+```
+
+
+# x402-manifest-from-openapi
+
+> Turn an OpenAPI 3.x / Swagger 2.0 spec (JSON or YAML, URL or inline) into a ready-to-mount x402 V2 paywall: per-operation accepts[] (exact, CAIP-2 network, atomic USDC amount, payTo, EIP-712 extra), @x402/core route config, Bazaar discovery input/output schemas, a /.well-known/x402 document and a sample PAYMENT-REQUIRED payload.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: x402_manifest_from_openapi
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/
+
+## Parameters
+
+- `url` (string): OpenAPI URL
+- `spec` (object): Inline spec (POST)
+- `payTo` (string, required): Receiving address
+- `price` (string): Default USD price per call
+- `prices` (string): JSON map {"GET /path": 0.002}
+- `network` (string): CAIP-2, default eip155:8453
+- `base_url` (string): Override server URL
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json&payTo=0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7&price=0.001"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi",
+    "description": "Turn an OpenAPI 3.x / Swagger 2.0 spec (JSON or YAML, URL or inline) into a ready-to-mount x402 V2 paywall: per-operation accepts[] (exact, CAIP-2 network, atomic USDC amount, payTo, EIP-712 extra), @x402/core route config, Bazaar discovery input/output schemas, a /.well-known/x402 document and a sample PAYMENT-REQUIRED payload.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "operations": 19,
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/pet/{petId}",
+      "accepts": [
+        {
+          "scheme": "exact",
+          "amount": "1000"
+        }
+      ]
+    }
+  ],
+  "well_known_x402": {
+    "version": 1,
+    "resources": []
+  }
+}
+```
+
+
+# pubmed-search
+
+> PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract. Accepts PubMed query syntax or a list of PMIDs. No API key needed.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/pubmed-search (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: pubmed_search
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/
+
+## Parameters
+
+- `q` (string): PubMed query
+- `pmid` (string): Comma-separated PMIDs (alternative to q)
+- `max` (string): 1-20, default 5
+- `sort` (string): relevance or pub_date
+- `abstracts` (string): true/false, default true
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/pubmed-search?q=x402+OR+%22agent+payments%22&max=3"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/pubmed-search",
+    "description": "PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract. Accepts PubMed query syntax or a list of PMIDs. No API key needed.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "total": 1234,
+  "count": 3,
+  "articles": [
+    {
+      "pmid": "38000000",
+      "title": "…",
+      "doi": "10.…",
+      "abstract": "…"
+    }
+  ]
+}
+```
+
+
+# x402-listing-check
+
+> Checks that a host exposes a valid x402 discovery listing (/.well-known/x402, x402.json, x402-listing): JSON, version, https resource URLs, same host, companions (/openapi.json, /llms.txt), and probes up to 10 listed resources for a real 402 challenge with consistent payTo. Never pays.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/x402-listing-check (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: x402_listing_check
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/
+
+## Parameters
+
+- `url` (string, required): Host or origin URL
+- `probe` (string): Resources to probe, 0-10, default 5
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check?url=https%3A%2F%2Fx402-gateway.forge-x402.workers.dev"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check",
+    "description": "Checks that a host exposes a valid x402 discovery listing (/.well-known/x402, x402.json, x402-listing): JSON, version, https resource URLs, same host, companions (/openapi.json, /llms.txt), and probes up to 10 listed resources for a real 402 challenge with consistent payTo. Never pays.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "verdict": "valid",
+  "resources_count": 14,
+  "probes": [
+    {
+      "status": 402,
+      "ok": true
+    }
+  ]
+}
+```
+
+
+# lei-lookup
+
+> Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country. Returns legal name, status, legal form, jurisdiction, legal and HQ addresses, registration status/renewal, BIC, direct and ultimate parents.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/lei-lookup (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: lei_lookup
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/
+
+## Parameters
+
+- `lei` (string): 20-char LEI
+- `name` (string): Legal name search (alternative)
+- `country` (string): ISO alpha-2 filter for name search
+- `max` (string): 1-20
+- `relationships` (string): true/false, default true
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/lei-lookup?lei=969500KMUQ2B6CBAF162"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/lei-lookup",
+    "description": "Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country. Returns legal name, status, legal form, jurisdiction, legal and HQ addresses, registration status/renewal, BIC, direct and ultimate parents.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "lei": "969500KMUQ2B6CBAF162",
+  "found": true,
+  "legal_name": "DANONE",
+  "status": "ACTIVE",
+  "jurisdiction": "FR",
+  "ultimate_parent": null
+}
+```
+
+
+# rss-to-json
+
+> RSS 2.0 / RSS 1.0 (RDF) / Atom / JSON Feed to clean JSON: feed title, link, language, updated, items with id, title, link, ISO dates, author, text summary, categories and enclosures (podcasts). URL or inline XML, item cap, `since` filter; HTML pages return discovered feed links.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/rss-to-json (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: rss_to_json
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/
+
+## Parameters
+
+- `url` (string): Feed URL
+- `xml` (string): Inline feed (POST)
+- `limit` (string): 1-100, default 20
+- `since` (string): ISO date: only newer items
+- `html` (string): keep HTML in summaries
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/rss-to-json?url=https%3A%2F%2Fhnrss.org%2Ffrontpage&limit=10"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/rss-to-json",
+    "description": "RSS 2.0 / RSS 1.0 (RDF) / Atom / JSON Feed to clean JSON: feed title, link, language, updated, items with id, title, link, ISO dates, author, text summary, categories and enclosures (podcasts). URL or inline XML, item cap, `since` filter; HTML pages return discovered feed links.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "format": "rss 2.0",
+  "title": "Hacker News: Front Page",
+  "count": 10,
+  "items": [
+    {
+      "title": "…",
+      "link": "…",
+      "published": "2026-11-10T12:00:00.000Z"
+    }
+  ]
+}
+```
+
+
+# eori-validate
+
+> EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC. Up to 10 numbers per call; returns validity plus name and address when the trader consented to publication.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/eori-validate (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: eori_validate
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/eori-validate/
+
+## Parameters
+
+- `eori` (string, required): EORI number(s), comma-separated, max 10
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/eori-validate?eori=FR55203253400019"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/eori-validate",
+    "description": "EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC. Up to 10 numbers per call; returns validity plus name and address when the trader consented to publication.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "count": 1,
+  "valid": 0,
+  "results": [
+    {
+      "eori": "FR55203253400019",
+      "valid": false,
+      "status": "Not valid",
+      "registry": "EU EOS (European Commission)"
+    }
+  ]
+}
+```
+
+
+# sec-financials
+
+> US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings. Any raw us-gaap tag also accepted.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/sec-financials (GET or POST)
+- Price: 0.005 USDC on Base (5000 atomic USDC)
+- MCP tool: sec_financials
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/sec-financials/
+
+## Parameters
+
+- `ticker` (string): Ticker, e.g. AAPL
+- `cik` (string): SEC CIK (alternative)
+- `years` (string): 1-5, default 3
+- `metrics` (string): Comma list: revenue,net_income,… or us-gaap:Tag
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/sec-financials?ticker=AAPL&years=3"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/sec-financials",
+    "description": "US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings. Any raw us-gaap tag also accepted.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "5000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "cik": "0000320193",
+  "name": "Apple Inc.",
+  "metrics": {
+    "revenue": {
+      "unit": "USD",
+      "annual": [
+        {
+          "period_end": "2026-09-26",
+          "value": 0
+        }
+      ]
+    }
+  }
+}
+```
+
+
+# openfoodfacts-product
+
+> Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: openfoodfacts_product
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/
+
+## Parameters
+
+- `barcode` (string, required): 8-14 digit barcode
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product?barcode=3017624010701"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product",
+    "description": "Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "found": true,
+  "name": "Nutella",
+  "brands": "Ferrero",
+  "nutriscore": "e"
+}
+```
+
+
+# arxiv-search
+
+> arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/arxiv-search (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: arxiv_search
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/
+
+## Parameters
+
+- `q` (string): Query
+- `id` (string): arXiv id(s), comma-separated
+- `max` (string): 1-25, default 5
+- `sort` (string): relevance, submitted, updated
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/arxiv-search?q=agent+payments&max=3"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/arxiv-search",
+    "description": "arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "total": 120,
+  "count": 3,
+  "papers": [
+    {
+      "id": "2501.00001v1",
+      "title": "…",
+      "pdf_url": "https://arxiv.org/pdf/2501.00001v1"
+    }
+  ]
+}
+```
+
+
+# crossref-doi
+
+> DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/crossref-doi (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: crossref_doi
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/
+
+## Parameters
+
+- `doi` (string, required): DOI or doi.org URL
+- `references` (string): true to include references
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/crossref-doi?doi=10.1038%2Fnature12373"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/crossref-doi",
+    "description": "DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "found": true,
+  "title": "Nanometre-scale thermometry in a living cell",
+  "container": "Nature"
+}
+```
+
+
+# gtin-validate
+
+> GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags. Up to 100 codes per call.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/gtin-validate (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: gtin_validate
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/
+
+## Parameters
+
+- `gtin` (string, required): Code(s), comma-separated
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/gtin-validate?gtin=3017624010701"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/gtin-validate",
+    "description": "GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags. Up to 100 codes per call.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "type": "EAN-13",
+  "valid": true,
+  "gtin14": "03017624010701",
+  "gs1_prefix_region": "France & Monaco"
+}
+```
+
+
+# isbn-validate
+
+> ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/isbn-validate (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: isbn_validate
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/
+
+## Parameters
+
+- `isbn` (string, required): ISBN-10 or ISBN-13
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/isbn-validate?isbn=978-2-07-036822-8"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/isbn-validate",
+    "description": "ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "format": "ISBN-13",
+  "valid": true,
+  "isbn10": "2070368223"
+}
+```
+
+
+# mcp-inspect
+
+> Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts. Read-only: never calls a tool.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/mcp-inspect (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: mcp_inspect
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/
+
+## Parameters
+
+- `url` (string, required): MCP endpoint URL
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect?url=https%3A%2F%2Fexample.com%2Fmcp"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect",
+    "description": "Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts. Read-only: never calls a tool.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "reachable": true,
+  "healthy": true,
+  "protocol_version": "2025-06-18",
+  "tools_count": 12
+}
+```
+
+
+# openapi-lint
+
+> OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples. Returns an agent-readiness score and actionable issues.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/openapi-lint (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: openapi_lint
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/
+
+## Parameters
+
+- `url` (string): Spec URL
+- `spec` (object): Inline spec (POST)
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openapi-lint?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-lint",
+    "description": "OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples. Returns an agent-readiness score and actionable issues.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "agent_readiness_score": 78,
+  "operations": 19,
+  "errors": 0,
+  "warnings": 4
+}
+```
+
+
+# sitemap-urls
+
+> sitemap.xml URL extractor: reads a sitemap or sitemap index (incl. .gz) and up to 10 child sitemaps, returns URLs with lastmod/changefreq/priority, optional substring filter, capped list (up to 5000).
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/sitemap-urls (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: sitemap_urls
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/
+
+## Parameters
+
+- `url` (string, required): Sitemap URL or site origin
+- `limit` (string): 1-5000, default 500
+- `max_children` (string): 0-10, default 5
+- `contains` (string): Only URLs containing this text
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls?url=https%3A%2F%2Fwww.sitemaps.org%2Fsitemap.xml&limit=50"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls",
+    "description": "sitemap.xml URL extractor: reads a sitemap or sitemap index (incl. .gz) and up to 10 child sitemaps, returns URLs with lastmod/changefreq/priority, optional substring filter, capped list (up to 5000).",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "type": "urlset",
+  "count": 50,
+  "urls": [
+    {
+      "loc": "https://…",
+      "lastmod": "2026-01-01"
+    }
+  ]
+}
+```
+
+
+# tz-convert
+
+> IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/tz-convert (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: tz_convert
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/tz-convert/
+
+## Parameters
+
+- `time` (string): ISO date-time or local time; default now
+- `from` (string): Source IANA zone for local times, default UTC
+- `to` (string, required): Target zones, comma-separated
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/tz-convert?time=2026-03-29T02%3A30&from=Europe%2FParis&to=America%2FNew_York%2CAsia%2FTokyo"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/tz-convert",
+    "description": "IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "status": "ok",
+  "results": [
+    {
+      "utc": "2026-11-10T15:00:00.000Z",
+      "targets": [
+        {
+          "zone": "Asia/Tokyo",
+          "local": "2026-11-11T00:00:00",
+          "offset": "+09:00"
+        }
+      ]
+    }
+  ]
+}
+```
+
+
+# uuid-v7
+
+> RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/uuid-v7 (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: uuid_v7
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/
+
+## Parameters
+
+- `count` (string): 1-100
+- `timestamp` (string): ISO date for the time part
+- `uuid` (string): UUID to validate/decode instead
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/uuid-v7?count=3"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/uuid-v7",
+    "description": "RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "version": 7,
+  "count": 3,
+  "uuids": [
+    "019a6f2e-…"
+  ]
+}
+```
+
+
+# siren-check
+
+> French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number. Up to 100 numbers. Offline: no register call.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/siren-check (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: siren_check
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/siren-check/
+
+## Parameters
+
+- `siren` (string, required): SIREN/SIRET number(s), comma-separated
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/siren-check?siren=552032534"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/siren-check",
+    "description": "French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number. Up to 100 numbers. Offline: no register call.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "type": "SIREN",
+  "valid": true,
+  "vat_number_fr": "FR27552032534"
+}
+```
+
+
+# phone-parse
+
+> Phone number parsing and validation to E.164 (libphonenumber numbering plans): validity, country, calling code, type (mobile, fixed line, toll-free…), national/international formats, tel: URI. Up to 50 numbers. No carrier lookup, no call.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/phone-parse (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: phone_parse
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/phone-parse/
+
+## Parameters
+
+- `phone` (string, required): Number(s); separate with ; or newline
+- `country` (string): Default ISO country for national numbers
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/phone-parse?phone=%2B33+1+23+45+67+89"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/phone-parse",
+    "description": "Phone number parsing and validation to E.164 (libphonenumber numbering plans): validity, country, calling code, type (mobile, fixed line, toll-free…), national/international formats, tel: URI. Up to 50 numbers. No carrier lookup, no call.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "valid": true,
+  "e164": "+33123456789",
+  "country": "FR",
+  "type": "FIXED_LINE"
+}
+```
+
+
+# x402-facilitator-health
+
+> x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl. CDP, xpay, x402.org, PayAI), reports alive/auth-required, latency, supported kinds (version, scheme, network), V2 and network support, and flags deprecated URLs.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: x402_facilitator_health
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/
+
+## Parameters
+
+- `url` (string): Facilitator base URL (optional)
+- `network` (string): CAIP-2 network to check, default eip155:8453
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health?network=eip155%3A8453"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health",
+    "description": "x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl. CDP, xpay, x402.org, PayAI), reports alive/auth-required, latency, supported kinds (version, scheme, network), V2 and network support, and flags deprecated URLs.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "checked": 4,
+  "alive": 3,
+  "results": [
+    {
+      "facilitator": "https://facilitator.xpay.sh",
+      "alive": true,
+      "supports_v2": true
+    }
+  ]
+}
+```
+
+
+# json-schema-validate
+
+> Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults. Returns errors, repaired JSON and fixes. POST recommended.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/json-schema-validate (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: json_schema_validate
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/
+
+## Parameters
+
+- `schema` (object, required): JSON Schema
+- `data` (string, required): JSON value or string to check
+- `repair` (string): true (default) / false
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate?schema=%5Bobject+Object%5D&data=%7B%22age%22%3A+%2242%22%7D"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate",
+    "description": "Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults. Returns errors, repaired JSON and fixes. POST recommended.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "valid": false,
+  "errors": [
+    {
+      "path": "$.age",
+      "msg": "expected integer, got string"
+    }
+  ],
+  "repaired": {
+    "age": 42
+  },
+  "repaired_valid": true
+}
+```
+
+
+# wikidata-entity
+
+> Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/wikidata-entity (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: wikidata_entity
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/
+
+## Parameters
+
+- `id` (string): Q-id
+- `q` (string): Search text (alternative)
+- `lang` (string): Language code, default en
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity?q=Annecy&lang=fr"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity",
+    "description": "Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "id": "Q50189",
+  "label": "Annecy",
+  "claims": {
+    "country": [
+      {
+        "id": "Q142",
+        "label": "France"
+      }
+    ]
+  }
+}
+```
+
+
+# fr-communes
+
+> French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/fr-communes (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: fr_communes
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fr-communes/
+
+## Parameters
+
+- `name` (string): Commune name
+- `postcode` (string): 5-digit postcode
+- `insee` (string): 5-char INSEE code
+- `limit` (string): 1-20
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fr-communes?name=Annecy"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/fr-communes",
+    "description": "French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "count": 1,
+  "results": [
+    {
+      "name": "Annecy",
+      "insee": "74010",
+      "population": 132117,
+      "department": {
+        "code": "74"
+      }
+    }
+  ]
+}
+```
+
+
+# fx-history
+
+> Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/fx-history (GET or POST)
+- Price: 0.002 USDC on Base (2000 atomic USDC)
+- MCP tool: fx_history
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fx-history/
+
+## Parameters
+
+- `from` (string): Base ISO 4217, default EUR
+- `to` (string, required): Target(s), comma-separated
+- `start` (string, required): YYYY-MM-DD
+- `end` (string): YYYY-MM-DD, default today
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fx-history?from=EUR&to=USD&start=2026-01-01&end=2026-03-31"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/fx-history",
+    "description": "Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "2000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "observations": 63,
+  "series": {
+    "USD": {
+      "stats": {
+        "min": 1.16,
+        "max": 1.19,
+        "change_pct": 1.2
+      }
+    }
+  }
+}
+```
+
+
+# fr-school-calendar
+
+> French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar (GET or POST)
+- Price: 0.001 USDC on Base (1000 atomic USDC)
+- MCP tool: fr_school_calendar
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/
+
+## Parameters
+
+- `zone` (string): A, B, C or overseas zone
+- `year` (string): School year e.g. 2026-2027
+- `date` (string): YYYY-MM-DD to test
+- `academie` (string): Académie name filter
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar?zone=A&year=2026-2027"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar",
+    "description": "French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "1000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "school_year": "2026-2027",
+  "count": 6,
+  "periods": [
+    {
+      "description": "Vacances de la Toussaint",
+      "start_local": "2026-10-17"
+    }
+  ]
+}
+```
+
+
+# openapi-to-mcp
+
+> Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.
+
+- URL: https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp (GET or POST)
+- Price: 0.003 USDC on Base (3000 atomic USDC)
+- MCP tool: openapi_to_mcp
+- Docs: https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/
+
+## Parameters
+
+- `url` (string): Spec URL
+- `spec` (object): Inline spec (POST)
+- `base_url` (string): Override server URL
+
+## Unpaid example
+
+```bash
+curl -sS -D - "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp?url=https%3A%2F%2Fpetstore3.swagger.io%2Fapi%2Fv3%2Fopenapi.json"
+```
+
+## Example 402 challenge
+
+```json
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp",
+    "description": "Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.",
+    "mimeType": "application/json"
+  },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "3000",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+      "maxTimeoutSeconds": 120,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    }
+  ]
+}
+```
+
+## Example response
+
+```json
+{
+  "count": 19,
+  "tools": [
+    {
+      "name": "getPetById",
+      "inputSchema": {
+        "type": "object"
+      }
+    }
+  ]
 }
 ```
 

@@ -2,7 +2,8 @@
 
 > Pay-per-call utility APIs (x402, USDC on Base) and public Apify Actors for agents and developers. Published by Forge Agent Hub. No account, no API key. Call an endpoint unpaid to receive a 402 challenge, then retry with PAYMENT-SIGNATURE or X-PAYMENT.
 
-API base: https://x402-gateway.forge-x402.workers.dev
+API base (original 14 tools): https://x402-gateway.forge-x402.workers.dev
+API base (wave-1 tools): https://forge-tools.dentreprise.workers.dev
 payTo: 0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7
 Network: eip155:8453 (Base)
 Asset: USDC 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
@@ -27,6 +28,35 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [ch-uid-batch](https://agent-hub.dentreprise.workers.dev/tools/ch-uid-batch/index.md): 0.05 USDC — Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register.
 - [dvf-price-m2](https://agent-hub.dentreprise.workers.dev/tools/dvf-price-m2/index.md): 0.01 USDC — French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale.
 - [bodacc-health](https://agent-hub.dentreprise.workers.dev/tools/bodacc-health/index.md): 0.003 USDC — French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary.
+- [x402-compliance](https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/index.md): 0.002 USDC — x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource.
+- [a2a-agent-card](https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/index.md): 0.002 USDC — A2A Agent Card validator and generator (A2A 1.
+- [mcp-manifest-lint](https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/index.md): 0.002 USDC — MCP manifest linter: validates an MCP registry server.
+- [x402-manifest-from-openapi](https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/index.md): 0.003 USDC — Turn an OpenAPI 3.
+- [pubmed-search](https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/index.md): 0.003 USDC — PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract.
+- [x402-listing-check](https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/index.md): 0.001 USDC — Checks that a host exposes a valid x402 discovery listing (/.
+- [lei-lookup](https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/index.md): 0.003 USDC — Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country.
+- [rss-to-json](https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/index.md): 0.002 USDC — RSS 2.
+- [eori-validate](https://agent-hub.dentreprise.workers.dev/tools/eori-validate/index.md): 0.003 USDC — EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC.
+- [sec-financials](https://agent-hub.dentreprise.workers.dev/tools/sec-financials/index.md): 0.005 USDC — US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings.
+- [openfoodfacts-product](https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/index.md): 0.002 USDC — Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.
+- [arxiv-search](https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/index.md): 0.002 USDC — arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.
+- [crossref-doi](https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/index.md): 0.002 USDC — DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.
+- [gtin-validate](https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/index.md): 0.001 USDC — GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags.
+- [isbn-validate](https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/index.md): 0.001 USDC — ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.
+- [mcp-inspect](https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/index.md): 0.002 USDC — Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts.
+- [openapi-lint](https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/index.md): 0.002 USDC — OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples.
+- [sitemap-urls](https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/index.md): 0.002 USDC — sitemap.
+- [tz-convert](https://agent-hub.dentreprise.workers.dev/tools/tz-convert/index.md): 0.001 USDC — IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).
+- [uuid-v7](https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/index.md): 0.001 USDC — RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).
+- [siren-check](https://agent-hub.dentreprise.workers.dev/tools/siren-check/index.md): 0.001 USDC — French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number.
+- [phone-parse](https://agent-hub.dentreprise.workers.dev/tools/phone-parse/index.md): 0.001 USDC — Phone number parsing and validation to E.
+- [x402-facilitator-health](https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/index.md): 0.001 USDC — x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl.
+- [json-schema-validate](https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/index.md): 0.001 USDC — Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults.
+- [wikidata-entity](https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/index.md): 0.002 USDC — Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.
+- [fr-communes](https://agent-hub.dentreprise.workers.dev/tools/fr-communes/index.md): 0.001 USDC — French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.
+- [fx-history](https://agent-hub.dentreprise.workers.dev/tools/fx-history/index.md): 0.002 USDC — Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.
+- [fr-school-calendar](https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/index.md): 0.001 USDC — French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).
+- [openapi-to-mcp](https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/index.md): 0.003 USDC — Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.
 
 ## Apify Actors
 
@@ -37,7 +67,7 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 14 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 43 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.

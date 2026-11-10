@@ -3,7 +3,7 @@
   "publisher": "Forge Agent Hub",
   "contact": "jqfpxwv7@mail.grokbot.com",
   "apiBase": "https://x402-gateway.forge-x402.workers.dev",
-  "updated": "2026-11-10T15:29:35.755Z",
+  "updated": "2026-11-10T15:37:24.056Z",
   "payment": {
     "protocol": "x402",
     "version": 2,
@@ -49,6 +49,7 @@
       "description": "French company lookup (SIREN/SIRET/name) from the official open-data Sirene base (recherche-entreprises.api.gouv.fr, Licence Ouverte Etalab). Returns legal name, SIREN, HQ address, NAF code, status, creation date, directors when public.",
       "path": "/api/fr-company",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-company",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -100,6 +101,7 @@
       "description": "EU VAT number validation against the European Commission VIES service, with normalised output (valid, name, address).",
       "path": "/api/eu-vat",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/eu-vat",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -146,6 +148,7 @@
       "description": "IBAN validation (ISO 13616 mod-97 checksum + per-country length), returns normalised IBAN, country and BBAN.",
       "path": "/api/iban",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/iban",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -191,6 +194,7 @@
       "description": "Fetch a public web page and return clean Markdown (scripts/styles/nav stripped) plus title. Max 2 MB, 15 s timeout, public IPs only.",
       "path": "/api/markdown",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/markdown",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -236,6 +240,7 @@
       "description": "French address geocoding and normalisation via the official Base Adresse Nationale (api-adresse.data.gouv.fr). Returns normalised label, postcode, city, INSEE code, lat/lon and score.",
       "path": "/api/fr-address",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/fr-address",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -289,6 +294,7 @@
       "description": "Official public holidays for a country and year (100+ countries, Nager.Date open data), plus whether a given date is a holiday.",
       "path": "/api/holidays",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/holidays",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -350,6 +356,7 @@
       "description": "Currency conversion at the official European Central Bank reference rate (via Frankfurter), with rate date. 30+ fiat currencies.",
       "path": "/api/fx",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/fx",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -411,6 +418,7 @@
       "description": "Fetch a public URL and return its metadata: title, meta description, canonical, language, OpenGraph and Twitter card tags, favicon, RSS feeds, h1s. Public IPs only.",
       "path": "/api/web-meta",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/web-meta",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -458,6 +466,7 @@
       "description": "Email address check: RFC syntax, domain MX/A records (deliverability signal, no SMTP probe), disposable-domain and role-account flags.",
       "path": "/api/email-check",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/email-check",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -508,6 +517,7 @@
       "description": "Domain registration data via RDAP (the official WHOIS successor): registrar, creation/expiry/update dates, status, nameservers, DNSSEC, age in days.",
       "path": "/api/rdap",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/rdap",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -557,6 +567,7 @@
       "description": "Swiss UID / VAT (MWST/TVA/IVA) number validation against the official Swiss Federal Statistical Office UID register (UID-Register, uid-wse). Returns format check (mod-11), register status, legal name, legal form, address, commercial-register and VAT status. Sole-proprietor names are masked.",
       "path": "/api/ch-uid",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -609,6 +620,7 @@
       "description": "Batch Swiss UID / VAT number validation (up to 25 numbers per call) against the official Swiss UID register. Same per-record output as /api/ch-uid. The register allows ~20 lookups/min, so a full batch can take up to ~80 s. Sole-proprietor names are masked.",
       "path": "/api/ch-uid-batch",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/ch-uid-batch",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -655,6 +667,7 @@
       "description": "French property price per m2 around an address from official DVF sales records (DGFiP / Etalab, last 3 years): median, p25/p75, count for apartments and houses within an auto-expanding radius, geocoded via Base Adresse Nationale. Not available for Alsace-Moselle and Mayotte.",
       "path": "/api/dvf-price-m2",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/dvf-price-m2",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -711,6 +724,7 @@
       "description": "French company legal-health check from the official BODACC notices (DILA open data) for a SIREN/SIRET: insolvency proceedings (sauvegarde, redressement, liquidation), deregistration, sales, accounts filings, last notice dates and a risk summary. Natural persons (sole traders) are masked.",
       "path": "/api/bodacc-health",
       "url": "https://x402-gateway.forge-x402.workers.dev/api/bodacc-health",
+      "host": "https://x402-gateway.forge-x402.workers.dev",
       "methods": [
         "GET",
         "POST"
@@ -749,6 +763,1709 @@
         "name": "DANONE",
         "noticesTotal": 107,
         "lastNoticeDate": "2026-09-02"
+      }
+    },
+    {
+      "id": "x402-compliance",
+      "kind": "x402",
+      "title": "x402-compliance",
+      "description": "x402 V2 compliance tester: probes any paid endpoint without paying and checks the 402 challenge (PAYMENT-REQUIRED header, x402Version 2, accepts[] schema, CAIP-2 network, atomic amount, canonical USDC asset, payTo, maxTimeoutSeconds, EIP-712 extra, resource, Bazaar extension, CORS) and that free 200s or forged payment headers never unlock the resource. Returns score, verdict and per-check details.",
+      "path": "/api/x402-compliance",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-compliance",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-compliance/",
+      "category": "x402 developer tools",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://x402-gateway.forge-x402.workers.dev/api/fx?from=EUR&to=USD"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Paid endpoint URL to test"
+          },
+          "method": {
+            "type": "string",
+            "description": "GET (default) or POST"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "verdict": "compliant",
+        "score": 100,
+        "summary": {
+          "pass": 14,
+          "warn": 0,
+          "fail": 0
+        },
+        "checks": [
+          {
+            "id": "status_402",
+            "status": "pass"
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2a-agent-card",
+      "kind": "x402",
+      "title": "a2a-agent-card",
+      "description": "A2A Agent Card validator and generator (A2A 1.0, detects and flags v0.3 cards): supportedInterfaces, protocolBinding/protocolVersion, capabilities, media-type modes, skills, provider, security schemes/requirements, JWS signature structure. Validate by URL (fetches /.well-known/agent-card.json) or inline JSON; or mode=generate from name, description, endpoint and skills.",
+      "path": "/api/a2a-agent-card",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/a2a-agent-card",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/a2a-agent-card/",
+      "category": "Agent builder tools",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://example.com"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Agent origin or card URL"
+          },
+          "card": {
+            "type": "object",
+            "description": "Inline Agent Card JSON (POST)"
+          },
+          "mode": {
+            "type": "string",
+            "description": "validate (default) or generate"
+          },
+          "name": {
+            "type": "string",
+            "description": "generate: agent name"
+          },
+          "description": {
+            "type": "string",
+            "description": "generate: description"
+          },
+          "endpoint": {
+            "type": "string",
+            "description": "generate: A2A endpoint https URL"
+          },
+          "skills": {
+            "type": "string",
+            "description": "generate: JSON array or comma-separated skill names"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "mode": "validate",
+        "spec_version_detected": "1.0",
+        "valid": true,
+        "errors": 0,
+        "warnings": 1,
+        "issues": []
+      }
+    },
+    {
+      "id": "mcp-manifest-lint",
+      "kind": "x402",
+      "title": "mcp-manifest-lint",
+      "description": "MCP manifest linter: validates an MCP registry server.json (official schema 2025-12-11: reverse-DNS name, 100-char description, pinned versions, packages registryType/transport, remotes, env vars, isSecret, fileSha256, additionalProperties) or a host config (mcpServers/servers: command vs url, args, env, hard-coded secrets). Inline JSON or URL.",
+      "path": "/api/mcp-manifest-lint",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-manifest-lint",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/mcp-manifest-lint/",
+      "category": "MCP developer tools",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "manifest": {
+          "name": "io.github.example/weather",
+          "description": "Weather MCP",
+          "version": "1.0.0",
+          "remotes": [
+            {
+              "type": "streamable-http",
+              "url": "https://example.com/mcp"
+            }
+          ]
+        }
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL of server.json or config"
+          },
+          "manifest": {
+            "type": "object",
+            "description": "Inline server.json or host config (POST)"
+          },
+          "kind": {
+            "type": "string",
+            "description": "server_json or host_config (auto-detected)"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "kind": "server_json",
+        "valid": true,
+        "errors": 0,
+        "warnings": 1,
+        "registry_ready": false,
+        "issues": [
+          {
+            "level": "warning",
+            "path": "$schema"
+          }
+        ]
+      }
+    },
+    {
+      "id": "x402-manifest-from-openapi",
+      "kind": "x402",
+      "title": "x402-manifest-from-openapi",
+      "description": "Turn an OpenAPI 3.x / Swagger 2.0 spec (JSON or YAML, URL or inline) into a ready-to-mount x402 V2 paywall: per-operation accepts[] (exact, CAIP-2 network, atomic USDC amount, payTo, EIP-712 extra), @x402/core route config, Bazaar discovery input/output schemas, a /.well-known/x402 document and a sample PAYMENT-REQUIRED payload.",
+      "path": "/api/x402-manifest-from-openapi",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-manifest-from-openapi",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-manifest-from-openapi/",
+      "category": "x402 developer tools",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "price": "0.001"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "OpenAPI URL"
+          },
+          "spec": {
+            "type": "object",
+            "description": "Inline spec (POST)"
+          },
+          "payTo": {
+            "type": "string",
+            "description": "Receiving address"
+          },
+          "price": {
+            "type": "string",
+            "description": "Default USD price per call"
+          },
+          "prices": {
+            "type": "string",
+            "description": "JSON map {\"GET /path\": 0.002}"
+          },
+          "network": {
+            "type": "string",
+            "description": "CAIP-2, default eip155:8453"
+          },
+          "base_url": {
+            "type": "string",
+            "description": "Override server URL"
+          }
+        },
+        "required": [
+          "payTo"
+        ]
+      },
+      "exampleResponse": {
+        "operations": 19,
+        "routes": [
+          {
+            "method": "GET",
+            "path": "/pet/{petId}",
+            "accepts": [
+              {
+                "scheme": "exact",
+                "amount": "1000"
+              }
+            ]
+          }
+        ],
+        "well_known_x402": {
+          "version": 1,
+          "resources": []
+        }
+      }
+    },
+    {
+      "id": "pubmed-search",
+      "kind": "x402",
+      "title": "pubmed-search",
+      "description": "PubMed / MEDLINE search with full records: PMID, title, authors, journal, year, volume/pages, DOI, PMCID, publication types, MeSH terms and abstract. Accepts PubMed query syntax or a list of PMIDs. No API key needed.",
+      "path": "/api/pubmed-search",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/pubmed-search",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/pubmed-search/",
+      "category": "Research & science",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "x402 OR \"agent payments\"",
+        "max": "3"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "PubMed query"
+          },
+          "pmid": {
+            "type": "string",
+            "description": "Comma-separated PMIDs (alternative to q)"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-20, default 5"
+          },
+          "sort": {
+            "type": "string",
+            "description": "relevance or pub_date"
+          },
+          "abstracts": {
+            "type": "string",
+            "description": "true/false, default true"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "total": 1234,
+        "count": 3,
+        "articles": [
+          {
+            "pmid": "38000000",
+            "title": "…",
+            "doi": "10.…",
+            "abstract": "…"
+          }
+        ]
+      }
+    },
+    {
+      "id": "x402-listing-check",
+      "kind": "x402",
+      "title": "x402-listing-check",
+      "description": "Checks that a host exposes a valid x402 discovery listing (/.well-known/x402, x402.json, x402-listing): JSON, version, https resource URLs, same host, companions (/openapi.json, /llms.txt), and probes up to 10 listed resources for a real 402 challenge with consistent payTo. Never pays.",
+      "path": "/api/x402-listing-check",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-listing-check",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-listing-check/",
+      "category": "x402 developer tools",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://x402-gateway.forge-x402.workers.dev"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Host or origin URL"
+          },
+          "probe": {
+            "type": "string",
+            "description": "Resources to probe, 0-10, default 5"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "verdict": "valid",
+        "resources_count": 14,
+        "probes": [
+          {
+            "status": 402,
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "lei-lookup",
+      "kind": "x402",
+      "title": "lei-lookup",
+      "description": "Legal Entity Identifier lookup from the official GLEIF register: by LEI (with ISO 17442 checksum check) or by legal-name search with optional country. Returns legal name, status, legal form, jurisdiction, legal and HQ addresses, registration status/renewal, BIC, direct and ultimate parents.",
+      "path": "/api/lei-lookup",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/lei-lookup",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/lei-lookup/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "lei": "969500KMUQ2B6CBAF162"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lei": {
+            "type": "string",
+            "description": "20-char LEI"
+          },
+          "name": {
+            "type": "string",
+            "description": "Legal name search (alternative)"
+          },
+          "country": {
+            "type": "string",
+            "description": "ISO alpha-2 filter for name search"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-20"
+          },
+          "relationships": {
+            "type": "string",
+            "description": "true/false, default true"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "lei": "969500KMUQ2B6CBAF162",
+        "found": true,
+        "legal_name": "DANONE",
+        "status": "ACTIVE",
+        "jurisdiction": "FR",
+        "ultimate_parent": null
+      }
+    },
+    {
+      "id": "rss-to-json",
+      "kind": "x402",
+      "title": "rss-to-json",
+      "description": "RSS 2.0 / RSS 1.0 (RDF) / Atom / JSON Feed to clean JSON: feed title, link, language, updated, items with id, title, link, ISO dates, author, text summary, categories and enclosures (podcasts). URL or inline XML, item cap, `since` filter; HTML pages return discovered feed links.",
+      "path": "/api/rss-to-json",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/rss-to-json",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/rss-to-json/",
+      "category": "Web data",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://hnrss.org/frontpage",
+        "limit": "10"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Feed URL"
+          },
+          "xml": {
+            "type": "string",
+            "description": "Inline feed (POST)"
+          },
+          "limit": {
+            "type": "string",
+            "description": "1-100, default 20"
+          },
+          "since": {
+            "type": "string",
+            "description": "ISO date: only newer items"
+          },
+          "html": {
+            "type": "string",
+            "description": "keep HTML in summaries"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "format": "rss 2.0",
+        "title": "Hacker News: Front Page",
+        "count": 10,
+        "items": [
+          {
+            "title": "…",
+            "link": "…",
+            "published": "2026-11-10T12:00:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": "eori-validate",
+      "kind": "x402",
+      "title": "eori-validate",
+      "description": "EORI number validation (customs trader ID) against the official European Commission EOS register, and UK GB numbers against HMRC. Up to 10 numbers per call; returns validity plus name and address when the trader consented to publication.",
+      "path": "/api/eori-validate",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/eori-validate",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/eori-validate/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "eori": "FR55203253400019"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "eori": {
+            "type": "string",
+            "description": "EORI number(s), comma-separated, max 10"
+          }
+        },
+        "required": [
+          "eori"
+        ]
+      },
+      "exampleResponse": {
+        "count": 1,
+        "valid": 0,
+        "results": [
+          {
+            "eori": "FR55203253400019",
+            "valid": false,
+            "status": "Not valid",
+            "registry": "EU EOS (European Commission)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "sec-financials",
+      "kind": "x402",
+      "title": "sec-financials",
+      "description": "US public company financial facts from SEC EDGAR XBRL (by ticker or CIK): revenue, net income, operating income, gross profit, diluted EPS, assets, liabilities, equity, cash, operating cash flow, long-term debt, shares outstanding — last 1-5 fiscal years plus latest quarter, with form, filing date and accession; plus recent 10-K/10-Q/8-K filings. Any raw us-gaap tag also accepted.",
+      "path": "/api/sec-financials",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/sec-financials",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/sec-financials/",
+      "category": "Finance",
+      "price": {
+        "amount": 0.005,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "5000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "ticker": "AAPL",
+        "years": "3"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "description": "Ticker, e.g. AAPL"
+          },
+          "cik": {
+            "type": "string",
+            "description": "SEC CIK (alternative)"
+          },
+          "years": {
+            "type": "string",
+            "description": "1-5, default 3"
+          },
+          "metrics": {
+            "type": "string",
+            "description": "Comma list: revenue,net_income,… or us-gaap:Tag"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "cik": "0000320193",
+        "name": "Apple Inc.",
+        "metrics": {
+          "revenue": {
+            "unit": "USD",
+            "annual": [
+              {
+                "period_end": "2026-09-26",
+                "value": 0
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "openfoodfacts-product",
+      "kind": "x402",
+      "title": "openfoodfacts-product",
+      "description": "Food product sheet from a barcode (EAN/UPC/GTIN) via Open Food Facts: name, brand, quantity, Nutri-Score, NOVA, Eco-Score, nutriments per 100 g, ingredients, allergens, traces, labels, categories, countries, packaging, image.",
+      "path": "/api/openfoodfacts-product",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openfoodfacts-product",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/openfoodfacts-product/",
+      "category": "Products & commerce",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "barcode": "3017624010701"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "barcode": {
+            "type": "string",
+            "description": "8-14 digit barcode"
+          }
+        },
+        "required": [
+          "barcode"
+        ]
+      },
+      "exampleResponse": {
+        "found": true,
+        "name": "Nutella",
+        "brands": "Ferrero",
+        "nutriscore": "e"
+      }
+    },
+    {
+      "id": "arxiv-search",
+      "kind": "x402",
+      "title": "arxiv-search",
+      "description": "arXiv preprint search (plain words or arXiv field syntax ti:, au:, abs:, cat:) or id lookup: title, authors, dates, categories, abstract, DOI, journal ref, abs and PDF links.",
+      "path": "/api/arxiv-search",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/arxiv-search",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/arxiv-search/",
+      "category": "Research & science",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "agent payments",
+        "max": "3"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Query"
+          },
+          "id": {
+            "type": "string",
+            "description": "arXiv id(s), comma-separated"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-25, default 5"
+          },
+          "sort": {
+            "type": "string",
+            "description": "relevance, submitted, updated"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "total": 120,
+        "count": 3,
+        "papers": [
+          {
+            "id": "2501.00001v1",
+            "title": "…",
+            "pdf_url": "https://arxiv.org/pdf/2501.00001v1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "crossref-doi",
+      "kind": "x402",
+      "title": "crossref-doi",
+      "description": "DOI metadata from Crossref: type, title, container (journal/book), publisher, authors with ORCID and affiliations, dates, volume/issue/pages, ISSN/ISBN, licenses, abstract, subjects, citation counts, funders, and optionally the reference list.",
+      "path": "/api/crossref-doi",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/crossref-doi",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/crossref-doi/",
+      "category": "Research & science",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "doi": "10.1038/nature12373"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "doi": {
+            "type": "string",
+            "description": "DOI or doi.org URL"
+          },
+          "references": {
+            "type": "string",
+            "description": "true to include references"
+          }
+        },
+        "required": [
+          "doi"
+        ]
+      },
+      "exampleResponse": {
+        "found": true,
+        "title": "Nanometre-scale thermometry in a living cell",
+        "container": "Nature"
+      }
+    },
+    {
+      "id": "gtin-validate",
+      "kind": "x402",
+      "title": "gtin-validate",
+      "description": "GTIN / EAN-8 / EAN-13 / UPC-A / UPC-E / GTIN-14 validation and normalisation (GS1 check digit): type, expected check digit, corrected code, GTIN-14 and EAN-13 forms, GS1 prefix region, book/coupon flags. Up to 100 codes per call.",
+      "path": "/api/gtin-validate",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/gtin-validate",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/gtin-validate/",
+      "category": "Products & commerce",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "gtin": "3017624010701"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "gtin": {
+            "type": "string",
+            "description": "Code(s), comma-separated"
+          }
+        },
+        "required": [
+          "gtin"
+        ]
+      },
+      "exampleResponse": {
+        "type": "EAN-13",
+        "valid": true,
+        "gtin14": "03017624010701",
+        "gs1_prefix_region": "France & Monaco"
+      }
+    },
+    {
+      "id": "isbn-validate",
+      "kind": "x402",
+      "title": "isbn-validate",
+      "description": "ISBN-10 / ISBN-13 validation and conversion (ISO 2108 check digits): valid flag, expected check digit, corrected value, both forms, GTIN-14, registration group hint.",
+      "path": "/api/isbn-validate",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/isbn-validate",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/isbn-validate/",
+      "category": "Products & commerce",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "isbn": "978-2-07-036822-8"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "description": "ISBN-10 or ISBN-13"
+          }
+        },
+        "required": [
+          "isbn"
+        ]
+      },
+      "exampleResponse": {
+        "format": "ISBN-13",
+        "valid": true,
+        "isbn10": "2070368223"
+      }
+    },
+    {
+      "id": "mcp-inspect",
+      "kind": "x402",
+      "title": "mcp-inspect",
+      "description": "Remote MCP server inspector (Streamable HTTP): initialize handshake, protocol version, serverInfo, capabilities, session, latency, tools/list with per-tool checks (name pattern, description, inputSchema object, undocumented or missing required params), resources/prompts counts. Read-only: never calls a tool.",
+      "path": "/api/mcp-inspect",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/mcp-inspect",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/mcp-inspect/",
+      "category": "MCP developer tools",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://example.com/mcp"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "MCP endpoint URL"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "reachable": true,
+        "healthy": true,
+        "protocol_version": "2025-06-18",
+        "tools_count": 12
+      }
+    },
+    {
+      "id": "openapi-lint",
+      "kind": "x402",
+      "title": "openapi-lint",
+      "description": "OpenAPI linter for agent readiness: version, info, servers, operationId presence/uniqueness/LLM-safe names, summaries, parameter schemas and descriptions, path placeholders, success and error responses, JSON examples. Returns an agent-readiness score and actionable issues.",
+      "path": "/api/openapi-lint",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-lint",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/openapi-lint/",
+      "category": "Agent builder tools",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Spec URL"
+          },
+          "spec": {
+            "type": "object",
+            "description": "Inline spec (POST)"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "agent_readiness_score": 78,
+        "operations": 19,
+        "errors": 0,
+        "warnings": 4
+      }
+    },
+    {
+      "id": "sitemap-urls",
+      "kind": "x402",
+      "title": "sitemap-urls",
+      "description": "sitemap.xml URL extractor: reads a sitemap or sitemap index (incl. .gz) and up to 10 child sitemaps, returns URLs with lastmod/changefreq/priority, optional substring filter, capped list (up to 5000).",
+      "path": "/api/sitemap-urls",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/sitemap-urls",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/sitemap-urls/",
+      "category": "Web data",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://www.sitemaps.org/sitemap.xml",
+        "limit": "50"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Sitemap URL or site origin"
+          },
+          "limit": {
+            "type": "string",
+            "description": "1-5000, default 500"
+          },
+          "max_children": {
+            "type": "string",
+            "description": "0-10, default 5"
+          },
+          "contains": {
+            "type": "string",
+            "description": "Only URLs containing this text"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "exampleResponse": {
+        "type": "urlset",
+        "count": 50,
+        "urls": [
+          {
+            "loc": "https://…",
+            "lastmod": "2026-01-01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tz-convert",
+      "kind": "x402",
+      "title": "tz-convert",
+      "description": "IANA time zone conversion: an instant (ISO with offset, Z, or Unix) or a local wall time in a source zone converted to up to 20 zones, with UTC offset, abbreviation and DST gap/overlap handling (ambiguous times return both instants).",
+      "path": "/api/tz-convert",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/tz-convert",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/tz-convert/",
+      "category": "Utilities",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "time": "2026-03-29T02:30",
+        "from": "Europe/Paris",
+        "to": "America/New_York,Asia/Tokyo"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "description": "ISO date-time or local time; default now"
+          },
+          "from": {
+            "type": "string",
+            "description": "Source IANA zone for local times, default UTC"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target zones, comma-separated"
+          }
+        },
+        "required": [
+          "to"
+        ]
+      },
+      "exampleResponse": {
+        "status": "ok",
+        "results": [
+          {
+            "utc": "2026-11-10T15:00:00.000Z",
+            "targets": [
+              {
+                "zone": "Asia/Tokyo",
+                "local": "2026-11-11T00:00:00",
+                "offset": "+09:00"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "uuid-v7",
+      "kind": "x402",
+      "title": "uuid-v7",
+      "description": "RFC 9562 UUIDv7 generator (time-sortable, 1-100 per call, optional timestamp) and UUID validator/decoder (version, variant, embedded timestamp for v1/v7).",
+      "path": "/api/uuid-v7",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/uuid-v7",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/uuid-v7/",
+      "category": "Utilities",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "count": "3"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "string",
+            "description": "1-100"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "ISO date for the time part"
+          },
+          "uuid": {
+            "type": "string",
+            "description": "UUID to validate/decode instead"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "version": 7,
+        "count": 3,
+        "uuids": [
+          "019a6f2e-…"
+        ]
+      }
+    },
+    {
+      "id": "siren-check",
+      "kind": "x402",
+      "title": "siren-check",
+      "description": "French SIREN (9) / SIRET (14) checksum validation (Luhn, La Poste exception), formatting, NIC, and the derived intra-EU VAT number. Up to 100 numbers. Offline: no register call.",
+      "path": "/api/siren-check",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/siren-check",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/siren-check/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "siren": "552032534"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siren": {
+            "type": "string",
+            "description": "SIREN/SIRET number(s), comma-separated"
+          }
+        },
+        "required": [
+          "siren"
+        ]
+      },
+      "exampleResponse": {
+        "type": "SIREN",
+        "valid": true,
+        "vat_number_fr": "FR27552032534"
+      }
+    },
+    {
+      "id": "phone-parse",
+      "kind": "x402",
+      "title": "phone-parse",
+      "description": "Phone number parsing and validation to E.164 (libphonenumber numbering plans): validity, country, calling code, type (mobile, fixed line, toll-free…), national/international formats, tel: URI. Up to 50 numbers. No carrier lookup, no call.",
+      "path": "/api/phone-parse",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/phone-parse",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/phone-parse/",
+      "category": "Utilities",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "phone": "+33 1 23 45 67 89"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "description": "Number(s); separate with ; or newline"
+          },
+          "country": {
+            "type": "string",
+            "description": "Default ISO country for national numbers"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "exampleResponse": {
+        "valid": true,
+        "e164": "+33123456789",
+        "country": "FR",
+        "type": "FIXED_LINE"
+      }
+    },
+    {
+      "id": "x402-facilitator-health",
+      "kind": "x402",
+      "title": "x402-facilitator-health",
+      "description": "x402 facilitator health check: calls GET /supported on a facilitator (or on a default list incl. CDP, xpay, x402.org, PayAI), reports alive/auth-required, latency, supported kinds (version, scheme, network), V2 and network support, and flags deprecated URLs.",
+      "path": "/api/x402-facilitator-health",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/x402-facilitator-health",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/x402-facilitator-health/",
+      "category": "x402 developer tools",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "network": "eip155:8453"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Facilitator base URL (optional)"
+          },
+          "network": {
+            "type": "string",
+            "description": "CAIP-2 network to check, default eip155:8453"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "checked": 4,
+        "alive": 3,
+        "results": [
+          {
+            "facilitator": "https://facilitator.xpay.sh",
+            "alive": true,
+            "supports_v2": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "json-schema-validate",
+      "kind": "x402",
+      "title": "json-schema-validate",
+      "description": "Validate LLM/agent JSON output against a JSON Schema (2020-12 subset) and auto-repair typical errors: code fences, trailing commas, numbers/booleans as strings, wrong enum case, single value instead of array, null optionals, extra or mis-cased keys, missing defaults. Returns errors, repaired JSON and fixes. POST recommended.",
+      "path": "/api/json-schema-validate",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/json-schema-validate",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/json-schema-validate/",
+      "category": "Agent builder tools",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "age": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "age"
+          ]
+        },
+        "data": "{\"age\": \"42\"}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "object",
+            "description": "JSON Schema"
+          },
+          "data": {
+            "type": "string",
+            "description": "JSON value or string to check"
+          },
+          "repair": {
+            "type": "string",
+            "description": "true (default) / false"
+          }
+        },
+        "required": [
+          "schema",
+          "data"
+        ]
+      },
+      "exampleResponse": {
+        "valid": false,
+        "errors": [
+          {
+            "path": "$.age",
+            "msg": "expected integer, got string"
+          }
+        ],
+        "repaired": {
+          "age": 42
+        },
+        "repaired_valid": true
+      }
+    },
+    {
+      "id": "wikidata-entity",
+      "kind": "x402",
+      "title": "wikidata-entity",
+      "description": "Wikidata entity lookup by Q-id or search text: label, description, aliases in a chosen language, key claims (instance of, country, coordinates, inception, website, population, HQ, founders, industry, identifiers such as LEI/ticker/ISNI…) with resolved labels, Wikipedia link.",
+      "path": "/api/wikidata-entity",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/wikidata-entity",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/wikidata-entity/",
+      "category": "Knowledge",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "Annecy",
+        "lang": "fr"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Q-id"
+          },
+          "q": {
+            "type": "string",
+            "description": "Search text (alternative)"
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code, default en"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "id": "Q50189",
+        "label": "Annecy",
+        "claims": {
+          "country": [
+            {
+              "id": "Q142",
+              "label": "France"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fr-communes",
+      "kind": "x402",
+      "title": "fr-communes",
+      "description": "French municipalities (INSEE COG) by name, postcode or INSEE code: official name, INSEE code, postcodes, population, area, department, region, EPCI, SIREN, centre coordinates.",
+      "path": "/api/fr-communes",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fr-communes",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-communes/",
+      "category": "France open data",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "name": "Annecy"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Commune name"
+          },
+          "postcode": {
+            "type": "string",
+            "description": "5-digit postcode"
+          },
+          "insee": {
+            "type": "string",
+            "description": "5-char INSEE code"
+          },
+          "limit": {
+            "type": "string",
+            "description": "1-20"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "count": 1,
+        "results": [
+          {
+            "name": "Annecy",
+            "insee": "74010",
+            "population": 132117,
+            "department": {
+              "code": "74"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fx-history",
+      "kind": "x402",
+      "title": "fx-history",
+      "description": "Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.",
+      "path": "/api/fx-history",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fx-history",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fx-history/",
+      "category": "Finance",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "from": "EUR",
+        "to": "USD",
+        "start": "2026-01-01",
+        "end": "2026-03-31"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Base ISO 4217, default EUR"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target(s), comma-separated"
+          },
+          "start": {
+            "type": "string",
+            "description": "YYYY-MM-DD"
+          },
+          "end": {
+            "type": "string",
+            "description": "YYYY-MM-DD, default today"
+          }
+        },
+        "required": [
+          "to",
+          "start"
+        ]
+      },
+      "exampleResponse": {
+        "observations": 63,
+        "series": {
+          "USD": {
+            "stats": {
+              "min": 1.16,
+              "max": 1.19,
+              "change_pct": 1.2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "fr-school-calendar",
+      "kind": "x402",
+      "title": "fr-school-calendar",
+      "description": "French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).",
+      "path": "/api/fr-school-calendar",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fr-school-calendar",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/",
+      "category": "France open data",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "zone": "A",
+        "year": "2026-2027"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "zone": {
+            "type": "string",
+            "description": "A, B, C or overseas zone"
+          },
+          "year": {
+            "type": "string",
+            "description": "School year e.g. 2026-2027"
+          },
+          "date": {
+            "type": "string",
+            "description": "YYYY-MM-DD to test"
+          },
+          "academie": {
+            "type": "string",
+            "description": "Académie name filter"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "school_year": "2026-2027",
+        "count": 6,
+        "periods": [
+          {
+            "description": "Vacances de la Toussaint",
+            "start_local": "2026-10-17"
+          }
+        ]
+      }
+    },
+    {
+      "id": "openapi-to-mcp",
+      "kind": "x402",
+      "title": "openapi-to-mcp",
+      "description": "Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.",
+      "path": "/api/openapi-to-mcp",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/openapi-to-mcp",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/",
+      "category": "MCP developer tools",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "url": "https://petstore3.swagger.io/api/v3/openapi.json"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Spec URL"
+          },
+          "spec": {
+            "type": "object",
+            "description": "Inline spec (POST)"
+          },
+          "base_url": {
+            "type": "string",
+            "description": "Override server URL"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "count": 19,
+        "tools": [
+          {
+            "name": "getPetById",
+            "inputSchema": {
+              "type": "object"
+            }
+          }
+        ]
       }
     }
   ],
