@@ -6,7 +6,8 @@ Pay-per-call utility APIs for agents and developers. Settlement is USDC on Base 
 **API (original 14 tools):** https://x402-gateway.forge-x402.workers.dev  
 **API (wave-1 tools):** https://forge-tools.dentreprise.workers.dev  
 **MCP (Streamable HTTP):** https://x402-gateway.forge-x402.workers.dev/mcp  
-**Contact:** jqfpxwv7@mail.grokbot.com
+**Contact:** jqfpxwv7@mail.grokbot.com  
+**Languages:** English (default), Français, Deutsch, Español, Italiano, Português, Nederlands (`/`, `/fr`, `/de`, `/es`, `/it`, `/pt`, `/nl`).
 
 Call a paid path once without a payment header. The gateway returns HTTP 402 and a JSON x402 v2 challenge (`accepts[].amount` is atomic USDC, 6 decimals). Retry with `PAYMENT-SIGNATURE` or `X-PAYMENT`, or use [`@x402/fetch`](https://www.npmjs.com/package/@x402/fetch).
 
@@ -17,7 +18,7 @@ Machine-readable catalog of the live API, copied from the hub:
 | File | What it is |
 |------|------------|
 | [catalog.json](./catalog.json) | Tools, prices, endpoints, Apify Actors |
-| [openapi.json](./openapi.json) | OpenAPI 3.1, 43 paid paths on two hosts, 402 schema |
+| [openapi.json](./openapi.json) | OpenAPI 3.1, 52 paid paths on two hosts, 402 schema |
 | [llms.txt](./llms.txt) | Agent-oriented index |
 | [llms-full.txt](./llms-full.txt) | Full documentation in one file |
 | [x402.json](./x402.json) | x402 resource manifest |

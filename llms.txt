@@ -57,6 +57,15 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 - [fx-history](https://agent-hub.dentreprise.workers.dev/tools/fx-history/index.md): 0.002 USDC — Official ECB reference-rate time series for a currency pair (or up to 10 targets) over a date range up to 2 years: daily points plus first/last/min/max/mean/% change.
 - [fr-school-calendar](https://agent-hub.dentreprise.workers.dev/tools/fr-school-calendar/index.md): 0.001 USDC — French school holidays (calendrier scolaire, Éducation nationale) by school year and zone A/B/C (or overseas/Corsica), with académies, start/end dates, and an optional date test (is this date a school holiday, and where).
 - [openapi-to-mcp](https://agent-hub.dentreprise.workers.dev/tools/openapi-to-mcp/index.md): 0.003 USDC — Convert an OpenAPI spec (JSON/YAML, URL or inline) into MCP tool definitions: LLM-safe unique names, descriptions, JSON Schema inputSchema (query/path/header params + JSON body), MCP annotations (readOnly/destructive/idempotent), plus HTTP forwarding hints and a ready tools/list response.
+- [sanctions-check](https://agent-hub.dentreprise.workers.dev/tools/sanctions-check/index.md): 0.005 USDC — Sanctions screening of a person, company or vessel name against the US Consolidated Screening List (OFAC SDN with aliases plus other Treasury, Commerce BIS and State lists), the EU consolidated financial sanctions list (FSF), the French national asset-freeze register (DG Trésor) and the UK sanctions list (FCDO).
+- [fr-legal-status](https://agent-hub.dentreprise.workers.dev/tools/fr-legal-status/index.md): 0.003 USDC — French company legal status by SIREN/SIRET: Sirene administrative status (active/ceased, closure date, legal form, NAF, head office) plus BODACC collective proceedings (sauvegarde, redressement, liquidation judiciaire, clôture) with latest stage, ongoing flag and risk level.
+- [eu-tenders](https://agent-hub.dentreprise.workers.dev/tools/eu-tenders/index.md): 0.003 USDC — Public tender scanner: keyword search across BOAMP (France) and TED (EU Official Journal, all member states) since a date, merged and sorted: title, buyer, publication date, deadline, notice type, country, CPV codes and link.
+- [uk-postcode](https://agent-hub.dentreprise.workers.dev/tools/uk-postcode/index.md): 0.001 USDC — UK postcode lookup and validation (postcodes.
+- [eu-address](https://agent-hub.dentreprise.workers.dev/tools/eu-address/index.md): 0.002 USDC — Address geocoding and normalisation through official national open services: France (Base Adresse Nationale), Netherlands (PDOK/BAG), Spain (CartoCiudad/IGN), Switzerland (swisstopo).
+- [no-company](https://agent-hub.dentreprise.workers.dev/tools/no-company/index.md): 0.002 USDC — Norwegian company register (Brønnøysundregistrene) by org number or name: legal form, registration and founding dates, VAT registration and VAT number, bankruptcy, liquidation and forced-dissolution flags, employees, industry, address, website.
+- [fi-company](https://agent-hub.dentreprise.workers.dev/tools/fi-company/index.md): 0.002 USDC — Finnish company register (PRH / YTJ open data) by Business ID (Y-tunnus) or name: current name, registration date, legal form, status, trade-register status, main business line, address, website, EUID and derived VAT number.
+- [kyb-check-fr](https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/index.md): 0.01 USDC — One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.
+- [supplier-due-diligence](https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/index.md): 0.01 USDC — Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.
 
 ## Apify Actors
 
@@ -67,7 +76,7 @@ The tool-request form is live (SHA-256 proof of work). Loyalty credits are plann
 
 ## Machine-readable
 
-- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 43 paid paths, 402 challenge schema, x-payment extension.
+- [OpenAPI 3.1](https://agent-hub.dentreprise.workers.dev/openapi.json): all 52 paid paths, 402 challenge schema, x-payment extension.
 - [catalog.json](https://agent-hub.dentreprise.workers.dev/catalog.json): tools, prices, endpoints, Apify links, planned loyalty.
 - [x402 manifest](https://agent-hub.dentreprise.workers.dev/.well-known/x402): resources and atomic prices.
 - [mcp.json](https://agent-hub.dentreprise.workers.dev/.well-known/mcp.json): existing MCP server description.

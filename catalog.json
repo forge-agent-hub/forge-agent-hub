@@ -3,7 +3,7 @@
   "publisher": "Forge Agent Hub",
   "contact": "jqfpxwv7@mail.grokbot.com",
   "apiBase": "https://x402-gateway.forge-x402.workers.dev",
-  "updated": "2026-11-10T15:37:24.056Z",
+  "updated": "2026-11-10T16:33:42.090Z",
   "payment": {
     "protocol": "x402",
     "version": 2,
@@ -2466,6 +2466,542 @@
             }
           }
         ]
+      }
+    },
+    {
+      "id": "sanctions-check",
+      "kind": "x402",
+      "title": "sanctions-check",
+      "description": "Sanctions screening of a person, company or vessel name against the US Consolidated Screening List (OFAC SDN with aliases plus other Treasury, Commerce BIS and State lists), the EU consolidated financial sanctions list (FSF), the French national asset-freeze register (DG Trésor) and the UK sanctions list (FCDO). Fuzzy Jaro-Winkler token matching with score, programmes, DOB; lists refreshed daily.",
+      "path": "/api/sanctions-check",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/sanctions-check",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/sanctions-check/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.005,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "5000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "name": "Bank Rossiya",
+        "type": "entity"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name to screen"
+          },
+          "type": {
+            "type": "string",
+            "description": "person, entity or vessel (optional)"
+          },
+          "lists": {
+            "type": "string",
+            "description": "ofac,eu,fr,uk (default all)"
+          },
+          "threshold": {
+            "type": "string",
+            "description": "0.7-1, default 0.88"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-50"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "exampleResponse": {
+        "query": "Bank Rossiya",
+        "match": true,
+        "highest_score": 1,
+        "hits": [
+          {
+            "list": "eu",
+            "name": "Bank Rossiya",
+            "score": 1,
+            "programmes": "UKR"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fr-legal-status",
+      "kind": "x402",
+      "title": "fr-legal-status",
+      "description": "French company legal status by SIREN/SIRET: Sirene administrative status (active/ceased, closure date, legal form, NAF, head office) plus BODACC collective proceedings (sauvegarde, redressement, liquidation judiciaire, clôture) with latest stage, ongoing flag and risk level.",
+      "path": "/api/fr-legal-status",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fr-legal-status",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fr-legal-status/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "siren": "552032534"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siren": {
+            "type": "string",
+            "description": "SIREN or SIRET"
+          },
+          "max": {
+            "type": "string",
+            "description": "notices 1-50"
+          }
+        },
+        "required": [
+          "siren"
+        ]
+      },
+      "exampleResponse": {
+        "siren": "552032534",
+        "company": {
+          "name": "DANONE",
+          "status": "active"
+        },
+        "collective_proceedings": {
+          "count": 0,
+          "ongoing": false
+        },
+        "risk": "none_found"
+      }
+    },
+    {
+      "id": "eu-tenders",
+      "kind": "x402",
+      "title": "eu-tenders",
+      "description": "Public tender scanner: keyword search across BOAMP (France) and TED (EU Official Journal, all member states) since a date, merged and sorted: title, buyer, publication date, deadline, notice type, country, CPV codes and link.",
+      "path": "/api/eu-tenders",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/eu-tenders",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-tenders/",
+      "category": "Sales & tenders",
+      "price": {
+        "amount": 0.003,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "3000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "q": "logiciel",
+        "since": "2026-11-01"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Keywords"
+          },
+          "since": {
+            "type": "string",
+            "description": "YYYY-MM-DD, default 30 days ago"
+          },
+          "sources": {
+            "type": "string",
+            "description": "boamp,ted"
+          },
+          "country": {
+            "type": "string",
+            "description": "TED buyer country ISO alpha-3, e.g. DEU"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-50 per source"
+          }
+        },
+        "required": [
+          "q"
+        ]
+      },
+      "exampleResponse": {
+        "count": 20,
+        "results": [
+          {
+            "source": "TED",
+            "title": "Software development services",
+            "buyer": "…",
+            "deadline": "2026-12-01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "uk-postcode",
+      "kind": "x402",
+      "title": "uk-postcode",
+      "description": "UK postcode lookup and validation (postcodes.io, ONS/OS open data): country, region, district, ward, parish, constituency, lat/lon, eastings/northings, NUTS; terminated postcodes detected; reverse lookup from lat/lon.",
+      "path": "/api/uk-postcode",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/uk-postcode",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/uk-postcode/",
+      "category": "Postcodes & addresses",
+      "price": {
+        "amount": 0.001,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "1000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "postcode": "SW1A 1AA"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "postcode": {
+            "type": "string",
+            "description": "UK postcode"
+          },
+          "lat": {
+            "type": "string",
+            "description": "reverse: latitude"
+          },
+          "lon": {
+            "type": "string",
+            "description": "reverse: longitude"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "valid": true,
+        "postcode": "SW1A 1AA",
+        "admin_district": "Westminster",
+        "lat": 51.501,
+        "lon": -0.1416
+      }
+    },
+    {
+      "id": "eu-address",
+      "kind": "x402",
+      "title": "eu-address",
+      "description": "Address geocoding and normalisation through official national open services: France (Base Adresse Nationale), Netherlands (PDOK/BAG), Spain (CartoCiudad/IGN), Switzerland (swisstopo). Returns normalised label, street, number, postcode, city, region, coordinates and score.",
+      "path": "/api/eu-address",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/eu-address",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/eu-address/",
+      "category": "Postcodes & addresses",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "address": "Damrak 1 Amsterdam",
+        "country": "NL"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Free-text address"
+          },
+          "country": {
+            "type": "string",
+            "description": "FR, NL, ES or CH"
+          },
+          "limit": {
+            "type": "string",
+            "description": "1-10"
+          }
+        },
+        "required": [
+          "address",
+          "country"
+        ]
+      },
+      "exampleResponse": {
+        "country": "NL",
+        "count": 1,
+        "results": [
+          {
+            "label": "Damrak 1, 1012LG Amsterdam",
+            "postcode": "1012LG",
+            "lat": 52.37,
+            "lon": 4.89
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-company",
+      "kind": "x402",
+      "title": "no-company",
+      "description": "Norwegian company register (Brønnøysundregistrene) by org number or name: legal form, registration and founding dates, VAT registration and VAT number, bankruptcy, liquidation and forced-dissolution flags, employees, industry, address, website.",
+      "path": "/api/no-company",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/no-company",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/no-company/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "orgnr": "923609016"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "orgnr": {
+            "type": "string",
+            "description": "9-digit org number"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name search"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-20"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "found": true,
+        "name": "EQUINOR ASA",
+        "vat_registered": true,
+        "bankrupt": false
+      }
+    },
+    {
+      "id": "fi-company",
+      "kind": "x402",
+      "title": "fi-company",
+      "description": "Finnish company register (PRH / YTJ open data) by Business ID (Y-tunnus) or name: current name, registration date, legal form, status, trade-register status, main business line, address, website, EUID and derived VAT number.",
+      "path": "/api/fi-company",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/fi-company",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/fi-company/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.002,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "2000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "business_id": "0112038-9"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "business_id": {
+            "type": "string",
+            "description": "Y-tunnus 1234567-8"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name search"
+          },
+          "max": {
+            "type": "string",
+            "description": "1-20"
+          }
+        },
+        "required": []
+      },
+      "exampleResponse": {
+        "total": 1,
+        "results": [
+          {
+            "business_id": "0112038-9",
+            "name": "Nokia Oyj",
+            "vat_number": "FI01120389"
+          }
+        ]
+      }
+    },
+    {
+      "id": "kyb-check-fr",
+      "kind": "x402",
+      "title": "kyb-check-fr",
+      "description": "One-call KYB for a French company (SIREN/SIRET): Sirene identity and status, BODACC collective proceedings, VIES intra-EU VAT validity (derived FR number) and sanctions screening (OFAC, EU, FR, UK) of the legal name, with a pass/review/fail verdict and flags.",
+      "path": "/api/kyb-check-fr",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/kyb-check-fr",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/kyb-check-fr/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.01,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "10000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "siren": "552032534"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siren": {
+            "type": "string",
+            "description": "SIREN or SIRET"
+          }
+        },
+        "required": [
+          "siren"
+        ]
+      },
+      "exampleResponse": {
+        "siren": "552032534",
+        "verdict": "pass",
+        "flags": [],
+        "vat": {
+          "valid": true
+        },
+        "sanctions": {
+          "match": false
+        }
+      }
+    },
+    {
+      "id": "supplier-due-diligence",
+      "kind": "x402",
+      "title": "supplier-due-diligence",
+      "description": "Supplier due diligence for any company name (optionally VAT number and country): VIES VAT check, GLEIF LEI candidates with entity and registration status, and sanctions screening (OFAC, EU, FR, UK), with a pass/review/fail verdict and flags.",
+      "path": "/api/supplier-due-diligence",
+      "url": "https://forge-tools.dentreprise.workers.dev/api/supplier-due-diligence",
+      "host": "https://forge-tools.dentreprise.workers.dev",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "docs": "https://agent-hub.dentreprise.workers.dev/tools/supplier-due-diligence/",
+      "category": "Company & trade identifiers",
+      "price": {
+        "amount": 0.01,
+        "currency": "USDC",
+        "network": "eip155:8453",
+        "networkName": "Base",
+        "atomic": "10000",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "payTo": "0x7B8bf45ac6AcbA6D4CFB626b57D3f5fF3C9C89F7",
+        "per": "call"
+      },
+      "input": {
+        "name": "Nokia Oyj",
+        "country": "FI",
+        "vat": "FI01120389"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Company name"
+          },
+          "country": {
+            "type": "string",
+            "description": "ISO alpha-2"
+          },
+          "vat": {
+            "type": "string",
+            "description": "EU VAT number (optional)"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "exampleResponse": {
+        "verdict": "pass",
+        "flags": [],
+        "vat": {
+          "valid": true
+        },
+        "lei": {
+          "candidates": [
+            {
+              "lei": "…",
+              "status": "ACTIVE"
+            }
+          ]
+        },
+        "sanctions": {
+          "match": false
+        }
       }
     }
   ],
